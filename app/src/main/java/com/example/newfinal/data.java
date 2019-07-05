@@ -1,6 +1,7 @@
 package com.example.newfinal;
 
 import android.media.Image;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -32,4 +33,6 @@ public static String menulist[]= {"삼겹살","pizza","ramen","rice","sushi","ha
     public static ArrayList<Integer> myList = new ArrayList<Integer>(Arrays.asList(R.drawable.meat,R.drawable.pizza,R.drawable.ramen,R.drawable.rice,R.drawable.sushi,R.drawable.hamburger,R.drawable.pasta,R.drawable.pork,R.drawable.chicken,R.drawable.pajeon));
     public static int[] imgs ={R.drawable.meat, R.drawable.pizza,R.drawable.ramen,R.drawable.rice,R.drawable.sushi,R.drawable.hamburger,R.drawable.pasta,R.drawable.pork,R.drawable.chicken,R.drawable.pajeon};
     public static boolean[] checkedItems = {true,true,true,true,true,true,true,true,true,true};
+
+    public static ArrayList<Uri> images = new ArrayList<>();
 }

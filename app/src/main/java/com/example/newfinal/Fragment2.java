@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import android.widget.ImageView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import static android.app.Activity.RESULT_OK;
 
 
@@ -99,8 +101,7 @@ public class Fragment2 extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         //super.onActivityResult(requestCode, resultCode, data);
-        ImageAdapter mImageAdapter = new ImageAdapter( getContext() );
-        ImageView imageView = new ImageView(context);
+        ImageAdapter mImageAdapter = new ImageAdapter( context);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1000: {
@@ -123,7 +124,7 @@ public class Fragment2 extends Fragment {
 
 
     private void initUI(final ViewGroup rootView) {
-        Button plusbutton= rootView.findViewById(R.id.plus);
+        FloatingActionButton plusbutton= rootView.findViewById(R.id.plus);
         plusbutton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View V) {
