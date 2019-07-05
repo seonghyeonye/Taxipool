@@ -15,6 +15,9 @@
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         />
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/plus"/>
 
 </RelativeLayout>
