@@ -3,6 +3,7 @@ package com.example.newfinal;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.ImageView;
@@ -19,6 +20,12 @@ public class FullImageActivity extends AppCompatActivity {
         Intent i = getIntent();
 
         int position = i.getExtras().getInt("id");
+        ImageAdapter adapter = new ImageAdapter(this);
+
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        //imageView.setImageResource(adapter.images.get(position));
+         Uri dataValue=adapter.images.get(position);
+         imageView.setImageURI(dataValue);
        // ImageAdapter adapter = new ImageAdapter(this);
 
       //  ImageView imageView = (ImageView) findViewById(R.id.imageView);
