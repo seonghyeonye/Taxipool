@@ -12,23 +12,30 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.QueryBuilder;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.List;
+
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
-
+    String _id = "5d1f65ef1c9d440000dc6ea4";
     private Context mContext;
-    private StringBuffer stringBuffer;
-    private JSONArray newjarray;
+    private List<Contact> contacts;
+    PortToServer port = new PortToServer("http://143.248.36.38:3000");
+    Gson gson = new Gson();
 
-
-
-    public PostAdapter(Context context, JSONArray jsonArray){
-        mContext=context;
-        //stringBuffer= sb;
-        newjarray=jsonArray;
+    public PostAdapter(Context mContext, List<Contact> contacts) {
+        this.mContext = mContext;
+        this.contacts = contacts;
     }
 
     @NonNull
@@ -42,42 +49,61 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final PostViewHolder holder, final int position) {
-        try {
-            final JSONObject newobject = newjarray.getJSONObject(position);
-            holder.ivname.setText(newobject.getString("name"));
-            holder.ivnumber.setText(newobject.getString("number"));
-            holder.ivrow.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    new AlertDialog.Builder(mContext)
-                            .setTitle("Confirm Message")
-                            .setMessage("연락처를 삭제하시겠습니까?")
-                            .setIcon(android.R.drawable.ic_menu_save)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    Toast.makeText(mContext.getApplicationContext(),"연락처가 삭제되었습니다",Toast.LENGTH_SHORT).show();
-                                    newjarray.remove(position);
-                                    data.newJSON=newjarray;
-                                    notifyDataSetChanged();
-                                    notifyItemRemoved(position);
-                                }})
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                }})
-                            .show();
-                    //PostAdapter adapter = new PostAdapter(mContext, newjarray);
-                    return true;
-                }
-            });
-        }
-        catch(JSONException e){
-            e.printStackTrace();
-        }
+        Contact contact = contacts.get(position);
+        holder.ivname.setText(contact.getName());
+        holder.ivnumber.setText(contact.getPhoneNumber());
+        holder.ivrow.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Confirm Message")
+                        .setMessage("연락처를 삭제하시겠습니까?")
+                        .setIcon(android.R.drawable.ic_menu_save)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                contacts.remove(position);
+                                Toast.makeText(mContext.getApplicationContext(), "연락처가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                DBObject query = QueryBuilder.start("account._id").is("myhwang99").get();
+                                System.out.println("123456");
+                                System.out.println(query);
+                                QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "contacts");
+                                QueryToServerMongo queryS = builder.getQueryU(new JSONArray().put(query).put(QueryBuilder.start("$set").is(QueryBuilder.start("contacts").is(contacts.toArray()).get()).get()));
+                                try {
+                                    JSONObject obj = port.postToServerV2(queryS);
+                                    if (obj.getString("result").equals("OK")){
+                                        contacts.clear();
+                                        obj = port.postToServerV2(builder.getQueryR(new JSONArray().put(new BasicDBObject())));
+                                        if (obj.getString("result").equals("OK")) {
+                                            if (obj.getJSONArray("data").length()>0){
+                                                JSONObject found = (JSONObject)obj.getJSONArray("data").get(0);
+                                                List<Contact> contactList = (List<Contact>) gson.fromJson(found.getString("contacts"), new TypeToken<List<Contact>>(){}.getType());
+                                                System.out.println("ok");
+                                                contacts.addAll(contactList);
+                                            }
+                                        }
+                                        notifyDataSetChanged();
+                                    }
+                                } catch(IOException e){
+                                    e.printStackTrace();
+                                } catch(JSONException e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        })
+                        .show();
+                //PostAdapter adapter = new PostAdapter(mContext, newjarray);
+                return true;
+            }
+        });
     }
 
 
     @Override
     public int getItemCount() {
-        return newjarray.length();
+        return contacts.size();
     }
 }
