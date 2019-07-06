@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="*">
+        <TableRow
+            android:layout_height="30dp">
+            <TextView
+                android:layout_width="25dp"
+                android:layout_height="70dp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_textview"
+                android:text="ID"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:id="@+id/userid" />
+
+            <TextView
+                android:id="@+id/starttime"
+                android:text="time"
+                android:textSize="17dp"
+                android:layout_height="70dp"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:fontFamily="@font/glass"
+                />
+            <TextView
+                android:id="@+id/people"
+                android:textSize="17dp"
+                android:text="1명"
+                android:gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="70dp"
+                android:fontFamily="@font/glass"
+                />
+            <TextView
+                android:id="@+id/limit"
+                android:textSize="17dp"
+                android:text="4명"
+                android:gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="70dp"
+                android:fontFamily="@font/glass"
+                />
+            <Button
+                android:id="@+id/enter"
+                android:textSize="17dp"
+                android:text="참여"
+                android:gravity="center"
+                android:background="@drawable/layout_bg"
+                android:layout_width="50dp"
+                android:layout_height="70dp"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/glass"
+                />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

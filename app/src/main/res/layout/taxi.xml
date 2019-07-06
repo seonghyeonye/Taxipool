@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_marginBottom="60dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/swap"
+        app:backgroundTint="#E66A00"
+        android:layout_width="60dp"
+        android:layout_height="93dp"
+        app:layout_anchor="@id/startpoint"
+        app:layout_anchorGravity="right|center"
+        app:srcCompat="@drawable/ic_swap_horiz_black_24dp"/>
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:stretchColumns="*"
+
         >
-        <TableRow>
+        <TableRow
+            android:layout_marginTop="100dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -31,16 +40,28 @@
         </TableRow>
 
         <TableRow>
+
             <Spinner
+                android:layout_margin="1dp"
+                android:background="#FEBF8B"
                 android:id="@+id/startpoint"
-                android:layout_height="40dp"
-                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:dropDownWidth="match_parent"
                 android:gravity="center"
+                android:textAlignment="center"
                 android:padding="5dp"
-                android:textSize="30dp"/>
+                android:spinnerMode="dropdown"
+                />
             <Spinner
-                android:layout_height="40dp"
-                android:layout_width="fill_parent"
+                android:layout_margin="1dp"
+                android:id="@+id/endpoint"
+                android:background="#FEBF8B"
+                android:textAlignment="center"
+                android:dropDownWidth="match_parent"
+                android:padding="5dp"
+                android:spinnerMode="dropdown"
+                android:gravity="center"
+                android:layout_height="70dp"
                 />
         </TableRow>
         <TableRow>
@@ -65,20 +86,26 @@
                 android:padding="5dp"
                 android:text="2019년 7월 6일 12:01"
                 android:textSize="20dp"
+                android:id="@+id/date"
                 />
         </TableRow>
+
         <TableRow>
             <TextView
-                android:layout_height="60dp"/>
+                android:layout_height="90dp"/>
         </TableRow>
         <TableRow>
-            <TextView
-                android:layout_height="200dp"/>
-        </TableRow>
         <Button
+            android:id="@+id/showtaxi"
+            android:background="#E66A00"
             android:layout_height="60dp"
             android:text="택시 조회"
             android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_span="2"
             />
+        </TableRow>
     </TableLayout>
-</LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

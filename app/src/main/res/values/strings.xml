@@ -26,7 +26,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string-array name="places">
+        <item>대전역</item>
+        <item>정부청사역</item>
+        <item>대전복합</item>
+        <item>서대전역</item>
+        <item>유성고속</item>
+        <item>유성시외</item>
+        <item>KAIST</item>
+    </string-array>
 
 </resources>
 
