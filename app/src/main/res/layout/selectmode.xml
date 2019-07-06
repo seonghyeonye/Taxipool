@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="T"
-        android:textSize="100dp"
+        android:src="@drawable/Taxi_Icon"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="100dp"/>
+    <Button
+        android:id="@+id/search_taxi"
+        android:textColor="@color/white"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="50dp"
-    />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AXI"
-        android:textSize="50dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="95dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="P"
-        android:textSize="100dp"
-        android:layout_marginLeft="180dp"
-        android:layout_marginTop="50dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OOL"
-        android:textSize="50dp"
-        android:layout_marginTop="95dp"
-        android:layout_marginLeft="230dp"/>
+        android:layout_width="300dp"
+        android:layout_gravity="center"
+        android:text="Search Taxi"
+        android:layout_height="60dp"
+        android:textSize="30dp"
+        android:background="@drawable/mybutton"
+        android:fontFamily="@font/glass"
+        />
+    <Button
+        android:id="@+id/mytaxi"
+        android:textColor="@color/white"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:text="My Taxi"
+        android:background="@drawable/mybutton2"
+        android:fontFamily="@font/glass"
+        android:textSize="30dp"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

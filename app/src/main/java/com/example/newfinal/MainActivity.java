@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity  {
     QueryToServerMongoBuilder builderGalleries = new QueryToServerMongoBuilder("madcamp", "galleries");
     Fragment1 fragment1 = new Fragment1();
     Fragment2 fragment2 = new Fragment2();
-    Fragment3 fragment3 = new Fragment3();
+    Fragment3_main fragment3 = new Fragment3_main();
     Login_fragment loginFragment = new Login_fragment();
     MainFragment mainFragment = new MainFragment();
     
