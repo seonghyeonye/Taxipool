@@ -49,6 +49,14 @@ public class MainActivity extends AppCompatActivity  {
         System.out.println("activity result");
         System.out.println("request: "+requestCode);
         System.out.println("result:"+ resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
+        SignUp_fragment.callbackManager.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            System.out.println("null found");
+        }
+        else{
+            System.out.println("not null");
+        }
         //System.out.println(data.getStringArrayExtra("item")[0]);
         switch (requestCode-65536) {
             case 1: {

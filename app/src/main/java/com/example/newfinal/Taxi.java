@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,6 +29,9 @@ public class Taxi extends Fragment {
         TextView startpoint2= rootView.findViewById(R.id.startpoint2);
         TextView endpoint2 = rootView.findViewById(R.id.endpoint2);
         TextView today = rootView.findViewById(R.id.today);
+        FloatingActionButton plus3= rootView.findViewById(R.id.plus3);
+
+
         System.out.println(startpoint2.getText());
         startpoint2.setText(Fragment3.startpoint);
         endpoint2.setText(Fragment3.endpoint);
@@ -37,5 +42,16 @@ public class Taxi extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
         String getTime=sdf.format(dateform);
         today.setText(getTime);
+
+        plus3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
+                        .replace(R.id.frameContainer, new taxi_register())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 }

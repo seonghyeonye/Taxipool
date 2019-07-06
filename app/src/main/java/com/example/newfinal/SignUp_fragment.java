@@ -64,7 +64,7 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
     private static TextView login;
     private static Button signUpButton;
     private static CheckBox terms_conditions;
-    private CallbackManager callbackManager;
+    public  static CallbackManager callbackManager;
     private CircleImageView circleImageView;
     private TextView txtName, txtEmail;
     private LoginButton loginButton;
@@ -85,7 +85,7 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
         circleImageView = view.findViewById(R.id.profile_email);
 
         //FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
+         callbackManager = CallbackManager.Factory.create();
         //LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile","email"));
         loginButton.setReadPermissions("email");
         loginButton.setFragment(this);
@@ -127,10 +127,9 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
 }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
     }
 
     // Initialize all views
