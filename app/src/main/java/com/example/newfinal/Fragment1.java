@@ -13,9 +13,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fragment1 extends Fragment {
 
@@ -23,6 +31,7 @@ public class Fragment1 extends Fragment {
 
     Context context;
     OnTabItemSelectedListener listener;
+    List<Contact> contacts = new ArrayList<>();
 
     @Override
     public void onAttach(Context context) {
@@ -56,36 +65,36 @@ public class Fragment1 extends Fragment {
 
 
     private void initUI(ViewGroup rootView) {
-
-
         recyclerView = rootView.findViewById(R.id.plant_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        //LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        //recyclerView.setLayoutManager(layoutManager);
-        StringBuffer sb = new StringBuffer();
-        //ArrayList<postItem> listItem= new ArrayList<>();
-        //String str="[{'name':'NAME','number':'NUMBER'},"+"{'name':'mom','number':'010-2322-2321'},"+"{'name':'dad','number':'010-1111-2222'},"+"{'name':'kim','number':'010-1111-2222'},"+"{'name':'lee','number':'010-1234-5678'}]";
-        //JSONArray jarray= new JSONArray("[{'name':'NAME','number':'NUMBER'},"+"{'name':'mom','number':'010-2322-2321'},"+"{'name':'dad','number':'010-1111-2222'},"+"{'name':'kim','number':'010-1111-2222'},"+"{'name':'lee','number':'010-1234-5678'}]");
+        final PostAdapter adapter = new PostAdapter(context, contacts);
+        recyclerView.setAdapter(adapter);
         try {
-            JSONArray jarray= data.newJSON;
-            System.out.println(jarray);
-            PostAdapter adapter = new PostAdapter(context, jarray);
-            recyclerView.setAdapter(adapter);
-            for(int i=0; i < jarray.length(); i++){
-                JSONObject jObject= jarray.getJSONObject(i);
-                String name = jObject.getString("name");
-                String number = jObject.getString("number");
-                sb.append("NAME:"+name+ "PHONE NB:"+number+"\n");
-                // ArrayList<String> newarray= new ArrayList<>() ;
+            PortToServer port = new PortToServer("http://143.248.36.38:3000");
+            QueryToServer queryS;
+            BasicDBObject query = new BasicDBObject().append("account._id", "myhwang99");
+            JSONArray queries = new JSONArray().put(query);
+            queryS = new QueryToServerMongo("madcamp", "contacts", "/crud/research", new JSONArray().put(query));
+            JSONObject respond = port.postToServerV2(queryS);
+            if (respond!=null) {
+                if (respond.getString("result").equals("OK")) {
+                    if (respond.getJSONArray("data").length() > 0) {
+                        Gson gson = new Gson();
+                        JSONObject found = (JSONObject) respond.getJSONArray("data").get(0);
+                        List<Contact> contactList = (List<Contact>) gson.fromJson(found.getString("contacts"), new TypeToken<List<Contact>>() {
+                        }.getType());
+                        System.out.println("ok");
+                        contacts.clear();
+                        contacts.addAll(contactList);
+                    }
+                }
             }
-            //recycle.setRecycledViewPool(sb.toString());
-            //tv.setText(sb.toString());
-
-        }
-        catch(JSONException e){
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        adapter.notifyDataSetChanged();
     }
 
 }
