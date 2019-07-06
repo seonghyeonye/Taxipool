@@ -1,5 +1,7 @@
 package com.example.newfinal;
 
+import com.google.gson.Gson;
+
 public class Contact {
     String _id;
     String name;
@@ -61,5 +63,10 @@ public class Contact {
 
         // Compare the data members and return accordingly
         return get_id().equals(rhs.get_id());
+    }
+
+    public String toString (){
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.newfinal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
@@ -32,6 +34,12 @@ public class Fragment1 extends Fragment {
     Context context;
     OnTabItemSelectedListener listener;
     List<Contact> contacts = new ArrayList<>();
+    FloatingActionButton buttonAdd;
+    ViewGroup rootView;
+
+    public ViewGroup getRootView() {
+        return rootView;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -56,15 +64,23 @@ public class Fragment1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment1, container, false);
-
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment1, container, false);
         initUI(rootView);
-
+        buttonAdd = rootView.findViewById(R.id.plus2);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addContacts();
+            }
+        });
         return rootView;
     }
 
+    private void addContacts(){
+        ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container, new PhoneBookRegisterFrag()).commit();
+    }
 
-    private void initUI(ViewGroup rootView) {
+    public void initUI(ViewGroup rootView) {
         recyclerView = rootView.findViewById(R.id.plant_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         final PostAdapter adapter = new PostAdapter(context, contacts);

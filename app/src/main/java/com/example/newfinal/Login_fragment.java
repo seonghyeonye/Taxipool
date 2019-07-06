@@ -45,13 +45,14 @@ public class Login_fragment extends Fragment {
     private static FragmentManager fragmentManager;
     private static EditText loginid;
     private static EditText loginpassword;
-    Fragment nextFrag2= new MainFragment();
+    MainFragment mainFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.loginpage, container, false);
         initViews();
         setListeners();
+        mainFragment = ((MainActivity)getActivity()).mainFragment;
         return view;
     }
 
@@ -150,7 +151,7 @@ public class Login_fragment extends Fragment {
 
         getActivity().getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.down_enter,R.anim.up_out)
-                .replace(R.id.frameContainer, nextFrag2)
+                .replace(R.id.frameContainer, mainFragment)
                 .addToBackStack(null)
                 .commit();
         System.out.println(loginid.getText().toString());

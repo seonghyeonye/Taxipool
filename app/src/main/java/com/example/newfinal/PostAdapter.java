@@ -27,7 +27,6 @@ import java.util.List;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
-    String _id = "5d1f65ef1c9d440000dc6ea4";
     private Context mContext;
     private List<Contact> contacts;
     PortToServer port = new PortToServer("http://143.248.36.38:3000");
@@ -41,9 +40,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View baseView = View.inflate(mContext, R.layout.phone_data,null);
+        View baseView = View.inflate(mContext, R.layout.phonebook_item,null);
         PostViewHolder postViewHolder=new PostViewHolder(baseView);
-
         return postViewHolder;
     }
 
@@ -52,6 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         Contact contact = contacts.get(position);
         holder.ivname.setText(contact.getName());
         holder.ivnumber.setText(contact.getPhoneNumber());
+        holder.ivemail.setText(contact.getEmail());
         holder.ivrow.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {

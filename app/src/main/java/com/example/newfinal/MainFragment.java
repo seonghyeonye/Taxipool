@@ -54,9 +54,10 @@ public class MainFragment extends Fragment implements OnTabItemSelectedListener 
 
         super.onCreate(savedInstanceState);
 
-        fragment1 = new Fragment1();
-        fragment2 = new Fragment2();
-        fragment3 = new Fragment3();
+        //fragment1 = new Fragment1();
+        fragment1 = ((MainActivity)getActivity()).fragment1;
+        fragment2 = ((MainActivity)getActivity()).fragment2;
+        fragment3 = ((MainActivity)getActivity()).fragment3;
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
 
