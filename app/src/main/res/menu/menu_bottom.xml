@@ -17,7 +17,7 @@
         android:id="@+id/tab3"
         app:showAsAction="ifRoom"
         android:enabled="true"
-        android:icon="@drawable/ic_restaurant_menu_black_24dp"
-        android:title="Menu" />
+        android:icon="@drawable/ic_local_taxi_black_24dp"
+        android:title="Taxi" />
 
 </menu>

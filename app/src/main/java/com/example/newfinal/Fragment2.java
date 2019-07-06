@@ -1,7 +1,9 @@
 package com.example.newfinal;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -91,6 +94,23 @@ public class Fragment2 extends Fragment {
                 Intent i = new Intent (getActivity(), FullImageActivity.class);
                 i.putExtra("id", position);
                 startActivity(i);
+            }
+        });
+
+        grid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                new AlertDialog.Builder(context)
+                        .setTitle("Confirm Message")
+                        .setMessage("사진를 삭제하시겠습니까?")
+                        .setIcon(android.R.drawable.ic_menu_save)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(context.getApplicationContext(), "사진이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                imageAdapter.images.remove(i);
+                            }
+                        });
+                return true;
             }
         });
         initUI(view);

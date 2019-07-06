@@ -65,7 +65,7 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ImageView imageView = new ImageView(context);
-        System.out.println(data.images.size());
+        //System.out.println(data.images.size());
         Uri dataValue=images.get(position);
         imageView.setImageURI(dataValue);
         imageView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT,500));

@@ -8,19 +8,8 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#80C29ECC" >
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/close_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="top|end"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/closebutton"
-            android:padding="5dp"
-             />
 
         <FrameLayout
             android:id="@+id/frameContainer"
