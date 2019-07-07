@@ -22,11 +22,27 @@ public class Fragment3_main extends Fragment {
     }
 
     private void initUI(ViewGroup rootView){
-        Button searchtaxi= rootView.findViewById(R.id.search_taxi);
+        final Button searchtaxi= rootView.findViewById(R.id.search_taxi);
+        final Button mytaxi=rootView.findViewById(R.id.mytaxi);
+
         searchtaxi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
+                        .replace(R.id.frameContainer, new Fragment3())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+        mytaxi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
+                        .replace(R.id.frameContainer,new chat_list())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

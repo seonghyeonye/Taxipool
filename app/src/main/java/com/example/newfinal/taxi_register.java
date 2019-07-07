@@ -24,6 +24,7 @@ public class taxi_register extends Fragment {
     }
     private void initUI(final ViewGroup rootView) {
         LinearLayout layout = rootView.findViewById(R.id.addtaxi);
+        Button buttoncancel= rootView.findViewById(R.id.cancelBtn);
         layout.setBackground(getActivity().getDrawable(R.drawable.round_bg));
         Button buttonInsert = (Button)rootView.findViewById(R.id.confirmBtn);
         name = rootView.findViewById(R.id.username);
@@ -51,6 +52,12 @@ public class taxi_register extends Fragment {
                     new CustomToast().Show_Toast(getActivity(), rootView,
                             "All fields are required.");
 
+            }
+        });
+        buttoncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
             }
         });
     }

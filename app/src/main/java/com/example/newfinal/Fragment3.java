@@ -1,12 +1,16 @@
 package com.example.newfinal;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +19,12 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,30 +45,15 @@ public class Fragment3 extends Fragment {
     Spinner spinner1;
     Context context;
     OnTabItemSelectedListener listener;
+    TableLayout stretchcal;
+    ViewGroup rootView;
+    public static TextView textView;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-        this.context = context;
-
-        if (context instanceof OnTabItemSelectedListener) {
-            listener = (OnTabItemSelectedListener) context;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        if (context != null) {
-            context = null;
-            listener = null;
-        }
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.taxi, container, false);
+        System.out.println("created");
+         rootView = (ViewGroup) inflater.inflate(R.layout.taxi, container, false);
 
         initUI(rootView);
 
@@ -68,11 +61,15 @@ public class Fragment3 extends Fragment {
     }
 
 
+
     private void initUI(final ViewGroup rootView) {
         spinner = rootView.findViewById(R.id.startpoint);
         spinner1 = rootView.findViewById(R.id.endpoint);
-        TextView textView= rootView.findViewById(R.id.date);
+        textView= rootView.findViewById(R.id.date);
         Button showtaxi = rootView.findViewById(R.id.showtaxi);
+
+        stretchcal =rootView.findViewById(R.id.stretchcal);
+
         setSpinner(spinner);
         setSpinner(spinner1);
         startpoint= spinner.getSelectedItem().toString();
@@ -111,6 +108,8 @@ public class Fragment3 extends Fragment {
         String getTime=sdf.format(dateform);
         textView.setText(getTime);
 
+        stretchcal.setOnClickListener(mOnClickListener);
+
     }
     private void setSpinner(final Spinner spinners){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.places,android.R.layout.simple_spinner_item);
@@ -133,6 +132,7 @@ public class Fragment3 extends Fragment {
 
             }
         });
+
         spinners.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -140,6 +140,57 @@ public class Fragment3 extends Fragment {
             }
         });
     }
+
+    private void showPopup(Context context, ViewGroup rootView) {
+
+        // Inflate the popup_layout.xml
+        LayoutInflater layoutInflater = (LayoutInflater)getActivity().getBaseContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.showcal, null,false);
+        // Creating the PopupWindow
+        final PopupWindow popupWindow = new PopupWindow(
+                layout,1100,600);
+
+        popupWindow.setContentView(layout);
+        popupWindow.setHeight(800);
+        popupWindow.setOutsideTouchable(false);
+        // Clear the default translucent background
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.showAtLocation(rootView,Gravity.CENTER,0,750);
+        CalendarView cv = (CalendarView) layout.findViewById(R.id.calendarView);
+        cv.setBackgroundColor(Color.WHITE);
+
+        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                //TODO Auto-generated method stub
+                popupWindow.dismiss();
+                month++;
+                textView.setText(year+"년 "+month+"월 "+dayOfMonth+"일 00:00");
+                Log.d("date selected", "date selected " + year + " " + month + " " + dayOfMonth);
+                stretchcal.setOnClickListener(mOnClickListener);
+
+            }
+        });
+        stretchcal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                stretchcal.setOnClickListener(mOnClickListener);
+            }
+        });
+
+    }
+
+    private  TableLayout.OnClickListener mOnClickListener=
+    new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            showPopup(context,rootView);
+        }
+    };
 
 
 }

@@ -2,9 +2,12 @@ package com.example.newfinal;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -36,12 +39,16 @@ public class Taxi extends Fragment {
         startpoint2.setText(Fragment3.startpoint);
         endpoint2.setText(Fragment3.endpoint);
 
-        long now = System.currentTimeMillis();
-        Date dateform= new Date(now);
-        System.out.println(dateform);
-        SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
-        String getTime=sdf.format(dateform);
-        today.setText(getTime);
+        CharSequence date= Fragment3.textView.getText();
+        try {
+            Date dateform = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm").parse((String) date);
+            SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
+            String getTime=sdf.format(dateform);
+            today.setText(getTime);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         plus3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,5 +60,7 @@ public class Taxi extends Fragment {
                         .commit();
             }
         });
+
+
     }
 }

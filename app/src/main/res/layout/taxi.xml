@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_marginBottom="60dp">
@@ -16,9 +17,10 @@
         app:layout_anchorGravity="right|center"
         app:srcCompat="@drawable/ic_swap_horiz_black_24dp"/>
 
+
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:stretchColumns="*"
 
@@ -68,6 +70,7 @@
             <TextView
                 android:layout_height="60dp"
                 />
+
         </TableRow>
         <TableRow>
             <TextView
@@ -78,6 +81,16 @@
                 android:text="출발일"
                 />
         </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_marginTop="300dp"
+        android:id="@+id/stretchcal"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:stretchColumns="*"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TableRow>
             <TextView
                 android:layout_height="70dp"
@@ -89,10 +102,32 @@
                 android:id="@+id/date"
                 />
         </TableRow>
-
+        <TableRow>
+            <ImageView
+                android:layout_height="30dp"
+                android:layout_span="2"
+                android:src="@drawable/ic_expand_more_black_24dp"
+                android:id="@+id/expand"
+                />
+        </TableRow>
+    </TableLayout>
+    <FrameLayout
+        android:id="@+id/calenderspace"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="400dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout_editor_absoluteX="52dp" >
+    <TableLayout
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:stretchColumns="*"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TableRow>
             <TextView
-                android:layout_height="90dp"/>
+                android:layout_height="90dp"
+                android:layout_span="2"/>
         </TableRow>
         <TableRow>
         <Button
@@ -106,6 +141,7 @@
             />
         </TableRow>
     </TableLayout>
+    </FrameLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
