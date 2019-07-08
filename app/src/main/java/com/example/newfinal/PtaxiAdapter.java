@@ -103,6 +103,8 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                                             }
                                         }
                                         notifyDataSetChanged();
+                                        PtaxiAdapter po = new PtaxiAdapter(mContext,mTaxitime);
+                                        po.notifyDataSetChanged();
                                     }
                                 } catch(IOException e){
                                     e.printStackTrace();
