@@ -120,10 +120,12 @@ public class Fragment2_D extends Fragment {
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                Intent i = new Intent (getActivity(), FullImageActivity.class);
-                i.putExtra("url", array_image.get(position).toString());
-                startActivity(i);
+                Bitmap bitmap = array_image.get(position);
+                Bundle bundle = new Bundle(1);
+                bundle.putByteArray("byteArray", bitmapToByteArray(bitmap));
+                PhotoStorePop photoStorePop = new PhotoStorePop();
+                photoStorePop.setArguments(bundle);
+                ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container, photoStorePop).commit();
 
             }
         });
@@ -138,9 +140,17 @@ public class Fragment2_D extends Fragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Toast.makeText(context.getApplicationContext(), "사진이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                                imageAdapter.images.remove(i);
+                                array_image.remove(i);
+                                imageAdapter.notifyDataSetChanged();
                             }
-                        });
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                imageAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .show();
+
                 return true;
             }
         });
@@ -416,9 +426,13 @@ public class Fragment2_D extends Fragment {
                         JSONArray found = obj.getJSONArray("data");
                         List<String> gallery = new ArrayList<>();
                         for (int i=0; i<found.length(); i++){
-                            gallery.add(found.getJSONObject(i).getJSONObject("gallery").getString("name"));
-                            show(gallery, selected);
+                            try {
+                                gallery.add(found.getJSONObject(i).getJSONObject("gallery").getString("name"));
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
+                        show(gallery, selected);
                         System.out.println("ok");
                     }
                 } catch (Exception e){
