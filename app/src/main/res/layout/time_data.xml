@@ -6,61 +6,65 @@
 
 
     <TableLayout
-        android:paddingRight="8dp"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:stretchColumns="*">
-        <TableRow
-            android:paddingLeft="8dp"
 
-            android:layout_height="30dp">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
             <TextView
-                android:layout_width="25dp"
+                android:id="@+id/starttime"
+                android:layout_width="35dp"
                 android:layout_height="60dp"
-                android:text="Start"
-                android:textSize="17dp"
-                android:gravity="center"
                 android:fontFamily="@font/glass"
-                android:id="@+id/starttime" />
+                android:gravity="center"
+                android:text="Start"
+                android:textSize="17dp" />
 
             <TextView
                 android:id="@+id/endtime"
-                android:text="end"
-                android:textSize="17dp"
+                android:layout_width="35dp"
                 android:layout_height="70dp"
-                android:gravity="center"
-                android:layout_width="wrap_content"
                 android:fontFamily="@font/glass"
-                />
+                android:gravity="center"
+                android:text="end"
+                android:textSize="17dp" />
+
             <TextView
                 android:id="@+id/people"
-                android:textSize="17dp"
-                android:text="1명"
-                android:gravity="center"
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="70dp"
                 android:fontFamily="@font/glass"
-                />
+                android:gravity="center"
+                android:text="0"
+                android:textSize="17dp" />
+
             <TextView
                 android:id="@+id/limit"
-                android:textSize="17dp"
-                android:text="4명"
-                android:gravity="center"
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="70dp"
                 android:fontFamily="@font/glass"
-                />
-            <Button
-                android:id="@+id/enter"
-                android:textSize="17dp"
-                android:text="참여"
                 android:gravity="center"
+                android:text="4명"
+                android:textSize="17dp" />
+
+            <Button
+                android:layout_marginRight="15dp"
+                android:id="@+id/enter"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/layout_bg"
-                android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:textColor="@android:color/white"
                 android:fontFamily="@font/glass"
-                />
+                android:gravity="center"
+                android:text="참여"
+                android:textColor="@android:color/white"
+                android:textSize="17dp" />
         </TableRow>
     </TableLayout>
 </LinearLayout>

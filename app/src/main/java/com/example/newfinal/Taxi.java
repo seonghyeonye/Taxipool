@@ -34,11 +34,13 @@ public class Taxi extends Fragment {
     Context context;
     RecyclerView recyclerView;
     List<Taxitime> taxitime = new ArrayList<>();
+    public static String getTime;
+    ViewGroup rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = ((MainActivity)getActivity());
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.show_taxi, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.show_taxi, container, false);
         initUI(rootView);
         return rootView;
     }
@@ -48,15 +50,26 @@ public class Taxi extends Fragment {
         TextView today = rootView.findViewById(R.id.today);
         FloatingActionButton plus3= rootView.findViewById(R.id.plus3);
 
+
+        CharSequence date= Fragment3.textView.getText();
+        try {
+            Date dateform = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm").parse((String) date);
+            SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
+            getTime=sdf.format(dateform);
+            today.setText(getTime);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         //Bundle bundle=this.getArguments();
         //if(bundle!=null){
 
        // }
 
-        recyclerView = rootView.findViewById(R.id.show_time);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        final PtaxiAdapter adapter = new PtaxiAdapter(context, taxitime);
-        recyclerView.setAdapter(adapter);
+//        recyclerView = rootView.findViewById(R.id.show_time);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        final PtaxiAdapter adapter = new PtaxiAdapter(context, taxitime);
+//        recyclerView.setAdapter(adapter);
 
         try {
             PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
@@ -84,22 +97,17 @@ public class Taxi extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
+        recyclerView = rootView.findViewById(R.id.show_time);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        final PtaxiAdapter adapter = new PtaxiAdapter(context, taxitime);
+        recyclerView.setAdapter(adapter);
 
         //System.out.println(startpoint2.getText());
         startpoint2.setText(Fragment3.startpoint);
         endpoint2.setText(Fragment3.endpoint);
 
-        CharSequence date= Fragment3.textView.getText();
-        try {
-            Date dateform = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm").parse((String) date);
-            SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
-            String getTime=sdf.format(dateform);
-            today.setText(getTime);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
 
         plus3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,5 +123,10 @@ public class Taxi extends Fragment {
         });
 
 
+    }
+
+    public void alert(){
+        new CustomToast().Show_Toast(getActivity(), rootView,
+                "All fields are required.");
     }
 }

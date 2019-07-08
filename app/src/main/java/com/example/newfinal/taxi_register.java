@@ -29,7 +29,6 @@ public class taxi_register extends Fragment {
     EditText limitperson;
     EditText mintime;
     EditText maxtime;
-    private String getTime;
 
     private OnFragmentInteractionListener2 mListener;
     PortToServer port;
@@ -90,17 +89,9 @@ public class taxi_register extends Fragment {
                     CharSequence date= Fragment3.textView.getText();
 
                     //time 설정
-                    try {
-                        Date dateform = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm").parse((String) date);
-                        SimpleDateFormat sdf = new SimpleDateFormat("MM dd");
-                        getTime=sdf.format(dateform);
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
 
                     //make taxitime
-                    Taxitime taxitime = new Taxitime(data[0], data[1], data[2],data[3],getTime,(String) Fragment3.startpoint, (String) Fragment3.endpoint);
+                    Taxitime taxitime = new Taxitime(data[0], data[1], data[2],data[3],Taxi.getTime,(String) Fragment3.startpoint, (String) Fragment3.endpoint);
                     try {
                         port.postToServerV2(builderTaxi.getQueryC(new JSONArray().put(QueryBuilder.start("taxi").is((BasicDBObject) JSON.parse(taxitime.toString())).get())));
                     } catch (IOException e) {

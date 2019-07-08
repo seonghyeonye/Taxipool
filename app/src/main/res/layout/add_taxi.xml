@@ -95,7 +95,7 @@
             android:singleLine = "true"
             android:lines = "1"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            />
     </LinearLayout>
 
     <LinearLayout
