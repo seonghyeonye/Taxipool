@@ -34,9 +34,9 @@
             android:layout_marginBottom="3dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="이름"/>
+            android:text="방 이름"/>
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/roomname"
             android:textSize="15sp"
             android:textColor="#000"
             android:alpha="0.87"
@@ -59,9 +59,34 @@
             android:layout_marginBottom="3dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="시간"/>
+            android:text="최소 시각"/>
         <EditText
-            android:id="@+id/taxitime"
+            android:id="@+id/mintime"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:alpha="0.87"
+            android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
+            android:singleLine = "true"
+            android:lines = "1"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="12dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="10sp"
+            android:textColor="#000"
+            android:alpha="0.87"
+            android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="최대 시각"/>
+        <EditText
+            android:id="@+id/maxtime"
             android:textSize="15sp"
             android:textColor="#000"
             android:alpha="0.87"

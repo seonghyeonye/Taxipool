@@ -5,16 +5,17 @@ import com.google.gson.Gson;
 public class Taxitime {
 
     String user;
-    String time;
+    String stime;
+    String etime;
     String limit;
+    String date;
+    String startplace;
+    String endplace;
 
     public String get_user() {
         return user;
     }
 
-    public String getTime() {
-        return time;
-    }
 
     public void setUser(String name) {
         this.user = user;
@@ -29,10 +30,14 @@ public class Taxitime {
         this.limit = limit;
     }
 
-    public Taxitime(String user, String time, String limit) {
+    public Taxitime(String user, String stime, String etime, String limit, String date, String startplace, String endplace) {
         this.user = user;
-        this.time = time;
+        this.stime = stime;
+        this.etime=etime;
         this.limit = limit;
+        this.date= date;
+        this.startplace= startplace;
+        this.endplace=endplace;
     }
 
     public String toString (){
