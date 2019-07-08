@@ -22,29 +22,31 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
     private Context mContext;
-    private List<Taxitime> mTaxitime;
+    private List<Taxitime> mTaxitime= new ArrayList<>();
     PortToServer port;
     Gson gson = new Gson();
+    View baseView;
 
     public PtaxiAdapter(Context mContext, List<Taxitime> time) {
         this.mContext = mContext;
         this.port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)mContext).cookies);
         for(int i=0;i<time.size();i++){
             Taxitime taxiitem= time.get(i);
-            if(taxiitem.startplace==Fragment3.startpoint&&taxiitem.endplace==Fragment3.endpoint&&Taxi.getTime==taxiitem.date){
+            if(taxiitem.startplace.equals(Fragment3.startpoint)&&taxiitem.endplace.equals(Fragment3.endpoint)&&Taxi.getTime.equals(taxiitem.date)){
                 this.mTaxitime.add(taxiitem);
                 System.out.println("condition matched");
             }
             else{
-                System.out.println(taxiitem.date);
+                System.out.println(taxiitem.date+"1");
                 System.out.println(Taxi.getTime);
-                System.out.println(taxiitem.startplace);
+                System.out.println(taxiitem.startplace+"2");
                 System.out.println(Fragment3.startpoint);
-                System.out.println(taxiitem.endplace);
+                System.out.println(taxiitem.endplace+"3");
                 System.out.println(Fragment3.endpoint);
             }
         }
@@ -53,7 +55,7 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
     @NonNull
     @Override
     public PtaxiViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View baseView = View.inflate(mContext, R.layout.time_data,null);
+        baseView = View.inflate(mContext, R.layout.time_data,null);
         PtaxiViewHolder postViewHolder=new PtaxiViewHolder(baseView);
         return postViewHolder;
     }
@@ -122,9 +124,11 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                 CharSequence currentlimit = holder.ivlimit.getText();
                 int peoplenumber = Integer.parseInt(currentholder.toString());
                 int limitnum = Integer.parseInt(currentlimit.toString());
-                if(peoplenumber<=limitnum){
+                if(peoplenumber>=limitnum){
+
                     Taxi taxi= new Taxi();
-                    taxi.alert();
+                    new CustomToast().Show_Toast(taxi.getActivity(), baseView,
+                            "All fields are required.");
                 }
                 else {
                     peoplenumber++;

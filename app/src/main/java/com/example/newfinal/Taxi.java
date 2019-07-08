@@ -50,6 +50,17 @@ public class Taxi extends Fragment {
         TextView today = rootView.findViewById(R.id.today);
         FloatingActionButton plus3= rootView.findViewById(R.id.plus3);
 
+
+        CharSequence date= Fragment3.textView.getText();
+        try {
+            Date dateform = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm").parse((String) date);
+            SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
+            getTime=sdf.format(dateform);
+            today.setText(getTime);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         //Bundle bundle=this.getArguments();
         //if(bundle!=null){
 
@@ -96,16 +107,7 @@ public class Taxi extends Fragment {
         startpoint2.setText(Fragment3.startpoint);
         endpoint2.setText(Fragment3.endpoint);
 
-        CharSequence date= Fragment3.textView.getText();
-        try {
-            Date dateform = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm").parse((String) date);
-            SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
-            getTime=sdf.format(dateform);
-            today.setText(getTime);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
 
         plus3.setOnClickListener(new View.OnClickListener() {
             @Override
