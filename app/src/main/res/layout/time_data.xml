@@ -35,7 +35,6 @@
             <TextView
                 android:id="@+id/people"
                 android:textSize="17dp"
-                android:text="1명"
                 android:gravity="center"
                 android:layout_width="30dp"
                 android:layout_height="70dp"

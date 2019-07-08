@@ -32,8 +32,13 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
 
     public PtaxiAdapter(Context mContext, List<Taxitime> time) {
         this.mContext = mContext;
-        this.mTaxitime = time;
         this.port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)mContext).cookies);
+        for(int i=0;i<mTaxitime.size();i++){
+            Taxitime taxiitem= mTaxitime.get(i);
+            if(taxiitem.startplace==Fragment3.startpoint&&taxiitem.endplace==Fragment3.endpoint&&Taxi.getTime==taxiitem.date){
+                this.mTaxitime.add(taxiitem);
+            }
+        }
     }
 
     @NonNull

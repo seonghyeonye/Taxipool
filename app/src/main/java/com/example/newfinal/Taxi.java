@@ -34,6 +34,7 @@ public class Taxi extends Fragment {
     Context context;
     RecyclerView recyclerView;
     List<Taxitime> taxitime = new ArrayList<>();
+    public static String getTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +95,7 @@ public class Taxi extends Fragment {
         try {
             Date dateform = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm").parse((String) date);
             SimpleDateFormat sdf = new SimpleDateFormat("MM월 dd일");
-            String getTime=sdf.format(dateform);
+            getTime=sdf.format(dateform);
             today.setText(getTime);
         }
         catch (Exception e){
