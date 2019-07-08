@@ -8,7 +8,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PtaxiViewHolder extends RecyclerView.ViewHolder {
-    public TextView ivuser, ivtime, ivlimit, ivpeople, ivtaxirow;
+    public TextView ivuser, ivtime, ivlimit, ivpeople;
+    public LinearLayout ivtaxirow;
     public Button iventer;
 
     public PtaxiViewHolder(View itemView) {

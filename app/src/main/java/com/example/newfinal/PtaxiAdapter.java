@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
@@ -61,13 +62,10 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                         .setIcon(android.R.drawable.ic_menu_save)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                mTaxitime.remove(position);
+                                Taxitime removed = mTaxitime.remove(position);
                                 Toast.makeText(mContext.getApplicationContext(), "일정이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                                DBObject query = QueryBuilder.start("account._id").is("myhwang99").get();
-                                System.out.println("123456");
-                                System.out.println(query);
-                                QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "taxi");
-                                QueryToServerMongo queryS = builder.getQueryU(new JSONArray().put(query).put(QueryBuilder.start("$set").is(QueryBuilder.start("taxi").is(mTaxitime.toArray()).get()).get()));
+                                QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "contacts");
+                                QueryToServerMongo queryS = builder.getQueryD(new JSONArray().put(new BasicDBObject().append("contact.name", removed.user)));
                                 try {
                                     JSONObject obj = port.postToServerV2(queryS);
                                     if (obj.getString("result").equals("OK")){
@@ -75,10 +73,13 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                                         obj = port.postToServerV2(builder.getQueryR(new JSONArray().put(new BasicDBObject())));
                                         if (obj.getString("result").equals("OK")) {
                                             if (obj.getJSONArray("data").length()>0){
-                                                JSONObject found = (JSONObject)obj.getJSONArray("data").get(0);
-                                                List<Taxitime> taxilist = (List<Taxitime>) gson.fromJson(found.getString("taxi"), new TypeToken<List<Taxitime>>(){}.getType());
+                                                JSONArray found = obj.getJSONArray("data");
+                                                List<Taxitime> taxitimeList = new ArrayList<>();
+                                                for (int i=0; i<found.length(); i++){
+                                                    taxitimeList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Taxitime.class));
+                                                }
                                                 System.out.println("ok");
-                                                mTaxitime.addAll(taxilist);
+                                                mTaxitime.addAll(taxitimeList);
                                             }
                                         }
                                         notifyDataSetChanged();

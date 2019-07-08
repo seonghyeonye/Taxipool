@@ -15,7 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainFragment extends Fragment implements OnTabItemSelectedListener {
     Fragment1 fragment1;
     Fragment2 fragment2;
-    Fragment3 fragment3;
+    Fragment3_main fragment3;
     MainActivity mainActivity;
     int id;
     BottomNavigationView bottomNavigation;
@@ -81,7 +81,7 @@ public class MainFragment extends Fragment implements OnTabItemSelectedListener 
         //fragment1 = new Fragment1();
         fragment1 = ((MainActivity)getActivity()).fragment1;
         fragment2 = ((MainActivity)getActivity()).fragment2;
-        Fragment3_main fragment3 = ((MainActivity)getActivity()).fragment3;
+        fragment3 = ((MainActivity)getActivity()).fragment3;
         mainActivity = ((MainActivity)getActivity());
     }
 
