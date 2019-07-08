@@ -2,6 +2,7 @@ package com.example.newfinal;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -134,11 +136,24 @@ public class Fragment2_U extends Fragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Toast.makeText(context.getApplicationContext(), "사진이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                getActivity().getContentResolver().delete(imageAdapter.images.get(i), null, null);
+                                //File fdelete = new File(getRealPathFromURI(imageAdapter.images.get(i)));
                                 imageAdapter.images.remove(i);
+                                imageAdapter.notifyDataSetChanged();
+                                /*
+                                if (fdelete.exists()) {
+                                    if (fdelete.delete()) {
+                                        System.out.println("file Deleted :" );
+                                    } else {
+                                        System.out.println("file not Deleted :");
+                                    }
+                                }
+                                */
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
+                                imageAdapter.notifyDataSetChanged();
                             }
                         })
                         .show();
@@ -199,6 +214,17 @@ public class Fragment2_U extends Fragment {
                         //System.out.println(uri.toString());
                         grid2.setAdapter(mImageAdapter);
                     }
+                    break;
+                }
+                case 1004: {
+                    System.out.println("activity result for 1004");
+                    refreshViewsAfterCheckPermission2();
+                    break;
+                }
+                case 1005: {
+                    System.out.println("activity result for 1004");
+                    refreshViews();
+                    break;
                 }
             }
         }
@@ -228,6 +254,7 @@ public class Fragment2_U extends Fragment {
      */
 
     private void initUI(final ViewGroup rootView) {
+        /*
         FloatingActionButton plusbutton= rootView.findViewById(R.id.plus);
         plusbutton.setOnClickListener(new View.OnClickListener() {
                                           @Override
@@ -251,9 +278,10 @@ public class Fragment2_U extends Fragment {
 
                                           }
                                       });
-
+*/
             // 갤러리에서 사진을 고르는 행위
-
+                System.out.println("angang");
+                refreshViewsAfterCheckPermission();
             }
 
 
@@ -273,8 +301,57 @@ public class Fragment2_U extends Fragment {
         return cursor.getString(column_index);
     }
 
+    public void refreshViewsAfterCheckPermission(){
+        System.out.println("checkPermission");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) // M is Marshmallow
+        {
+            if (ContextCompat.checkSelfPermission(context,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) { // 만약 외부 저장소 접근이 허용되어있지 않다면
+                // permission not granted, request it.
+                String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE}; // 외부 저장소(ex. 갤러리) 읽기 권한 요청을 담기
+                requestPermissions(permissions, 1004); // 요청 보내기
+                // 이 함수는 사용자에게 [Allow/Deny] 여부를 팝업 창으로부터 선택하게 하고
+                // onRequestPermissionsResult 함수를 호출함
+            }
+            refreshViewsAfterCheckPermission2();
+        } else{
+            refreshViewsAfterCheckPermission2();
+        }
+    }
 
+    public void refreshViewsAfterCheckPermission2(){
+        System.out.println("checkPermission");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) // M is Marshmallow
+        {
+            if (ContextCompat.checkSelfPermission(context,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) { // 만약 외부 저장소 접근이 허용되어있지 않다면
+                // permission not granted, request it.
+                String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE}; // 외부 저장소(ex. 갤러리) 읽기 권한 요청을 담기
+                requestPermissions(permissions, 1005); // 요청 보내기
+                // 이 함수는 사용자에게 [Allow/Deny] 여부를 팝업 창으로부터 선택하게 하고
+                // onRequestPermissionsResult 함수를 호출함
+            }
+            refreshViews();
+        } else{
+            refreshViews();
+        }
+    }
 
+    public void refreshViews(){
+        System.out.println("refreshViews");
+        String[] proj = {MediaStore.Images.Media._ID};
+        Cursor imageCursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                proj, null, null, null);
+        List<Uri> uris = new ArrayList<>();
+        imageCursor.moveToFirst();
+        while(!imageCursor.isAfterLast()){
+            int imgID = imageCursor.getInt(imageCursor.getColumnIndex(MediaStore.Images.Media._ID));
+            Uri uri = ContentUris.withAppendedId( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgID);
+            uris.add(uri);
+            imageCursor.moveToNext();
+        }
+        array_image.clear();
+        array_image.addAll(uris);
+        imageAdapter.notifyDataSetChanged();
+    }
 }
 
 
