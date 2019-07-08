@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
@@ -22,6 +23,17 @@ public class chat_list extends Fragment {
 
     private void initUI(ViewGroup rootView){
         TabLayout tablist  = rootView.findViewById(R.id.tabs);
+        ImageView backchatlist = rootView.findViewById(R.id.backchatlist);
+        backchatlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.left_in,R.anim.right_out)
+                        .replace(R.id.frameContainer, new Fragment3_main())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         tablist.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

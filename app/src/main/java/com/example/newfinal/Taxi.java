@@ -49,7 +49,18 @@ public class Taxi extends Fragment {
         TextView endpoint2 = rootView.findViewById(R.id.endpoint2);
         TextView today = rootView.findViewById(R.id.today);
         FloatingActionButton plus3= rootView.findViewById(R.id.plus3);
+        ImageView backshowtaxi= rootView.findViewById(R.id.backshowtaxi);
 
+        backshowtaxi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.left_in,R.anim.right_out)
+                        .replace(R.id.frameContainer, new Fragment3())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         CharSequence date= Fragment3.textView.getText();
         try {

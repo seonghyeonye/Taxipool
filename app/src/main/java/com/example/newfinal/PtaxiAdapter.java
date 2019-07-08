@@ -1,8 +1,10 @@
 package com.example.newfinal;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +35,6 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
     PortToServer port;
     Gson gson = new Gson();
     View baseView;
-
     public PtaxiAdapter(Context mContext, List<Taxitime> time) {
         this.mContext = mContext;
         this.port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)mContext).cookies);
@@ -69,6 +70,11 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
         holder.ivStime.setText(taxitime.stime);
         holder.ivEtime.setText(taxitime.etime);
         holder.ivlimit.setText(taxitime.limit);
+        if(taxitime.enter.equals("yes")){
+            holder.iventer.setText("나가기");
+            holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bgc));
+        }
+
         if(holder.ivpeople.getText()==null){
             System.out.println("this is now be filled");
             holder.ivpeople.setText('0');
@@ -138,6 +144,8 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                         holder.ivpeople.setText(added);
                         holder.iventer.setText("나가기");
                         holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bgc));
+
+
                     }
                 }
                 else {

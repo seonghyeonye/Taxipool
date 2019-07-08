@@ -71,9 +71,10 @@ public class MainActivity extends AppCompatActivity  {
         System.out.println(currentTab);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, currentFrag).commit();
     }
-    /*@Override
+    @Override
     public void onBackPressed() {
-
+    }
+    /*
         int count = getSupportFragmentManager().getBackStackEntryCount();
         System.out.println(count);
         if (count == 2) {
