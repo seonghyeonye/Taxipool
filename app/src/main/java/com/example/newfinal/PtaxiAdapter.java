@@ -64,8 +64,8 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Taxitime removed = mTaxitime.remove(position);
                                 Toast.makeText(mContext.getApplicationContext(), "일정이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                                QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "contacts");
-                                QueryToServerMongo queryS = builder.getQueryD(new JSONArray().put(new BasicDBObject().append("contact.name", removed.user)));
+                                QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "taxi");
+                                QueryToServerMongo queryS = builder.getQueryD(new JSONArray().put(new BasicDBObject().append("taxi.user", removed.user)));
                                 try {
                                     JSONObject obj = port.postToServerV2(queryS);
                                     if (obj.getString("result").equals("OK")){
@@ -76,7 +76,7 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                                                 JSONArray found = obj.getJSONArray("data");
                                                 List<Taxitime> taxitimeList = new ArrayList<>();
                                                 for (int i=0; i<found.length(); i++){
-                                                    taxitimeList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Taxitime.class));
+                                                    taxitimeList.add(gson.fromJson(found.getJSONObject(i).getString("taxi"), Taxitime.class));
                                                 }
                                                 System.out.println("ok");
                                                 mTaxitime.addAll(taxitimeList);
