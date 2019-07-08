@@ -8,13 +8,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PtaxiViewHolder extends RecyclerView.ViewHolder {
-    public TextView ivuser, ivtime, ivlimit, ivpeople, ivtaxirow;
+    public TextView ivStime,ivEtime, ivlimit, ivpeople, ivtaxirow;
     public Button iventer;
 
     public PtaxiViewHolder(View itemView) {
         super(itemView);
-        ivuser = itemView.findViewById(R.id.userid);
-        ivtime = itemView.findViewById(R.id.starttime);
+        ivStime = itemView.findViewById(R.id.starttime);
+        ivEtime = itemView.findViewById(R.id.endtime);
         ivlimit = itemView.findViewById(R.id.limit);
         ivpeople= itemView.findViewById(R.id.people);
         iventer = itemView.findViewById(R.id.enter);

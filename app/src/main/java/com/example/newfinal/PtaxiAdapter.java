@@ -46,8 +46,8 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final PtaxiViewHolder holder, final int position) {
         Taxitime taxitime= mTaxitime.get(position);
-        holder.ivuser.setText(taxitime.user);
-        holder.ivtime.setText(taxitime.time);
+        holder.ivStime.setText(taxitime.stime);
+        holder.ivEtime.setText(taxitime.etime);
         holder.ivlimit.setText(taxitime.limit);
         if(holder.ivpeople.getText()==null){
             holder.ivpeople.setText(0);
