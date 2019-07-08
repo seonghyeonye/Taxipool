@@ -11,6 +11,7 @@ public class Taxitime {
     String date;
     String startplace;
     String endplace;
+    String enter;
 
     public String get_user() {
         return user;
@@ -30,7 +31,7 @@ public class Taxitime {
         this.limit = limit;
     }
 
-    public Taxitime(String user, String stime, String etime, String limit, String date, String startplace, String endplace) {
+    public Taxitime(String user, String stime, String etime, String limit, String date, String startplace, String endplace, String enter) {
         this.user = user;
         this.stime = stime;
         this.etime=etime;
@@ -38,6 +39,7 @@ public class Taxitime {
         this.date= date;
         this.startplace= startplace;
         this.endplace=endplace;
+        this.enter=enter;
     }
 
     public String toString (){

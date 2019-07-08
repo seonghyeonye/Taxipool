@@ -91,7 +91,7 @@ public class taxi_register extends Fragment {
                     //time 설정
 
                     //make taxitime
-                    Taxitime taxitime = new Taxitime(data[0], data[1], data[2],data[3],Taxi.getTime,(String) Fragment3.startpoint, (String) Fragment3.endpoint);
+                    Taxitime taxitime = new Taxitime(data[0], data[1], data[2],data[3],Taxi.getTime,(String) Fragment3.startpoint, (String) Fragment3.endpoint,"yes");
                     try {
                         port.postToServerV2(builderTaxi.getQueryC(new JSONArray().put(QueryBuilder.start("taxi").is((BasicDBObject) JSON.parse(taxitime.toString())).get())));
                     } catch (IOException e) {
@@ -105,7 +105,8 @@ public class taxi_register extends Fragment {
         buttoncancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().onBackPressed();
+                ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer,((MainActivity)getActivity()).taxi).commit();
+                //getActivity().onBackPressed();
             }
         });
 

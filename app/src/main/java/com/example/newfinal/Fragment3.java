@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -65,7 +66,7 @@ public class Fragment3 extends Fragment {
         spinner1 = rootView.findViewById(R.id.endpoint);
         textView= rootView.findViewById(R.id.date);
         Button showtaxi = rootView.findViewById(R.id.showtaxi);
-
+        ImageView backtaxi =rootView.findViewById(R.id.backtaxi);
         stretchcal =rootView.findViewById(R.id.stretchcal);
 
         setSpinner(spinner);
@@ -77,9 +78,23 @@ public class Fragment3 extends Fragment {
         showtaxi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
-                        .replace(R.id.frameContainer, new Taxi())
+                if (startpoint.equals(endpoint)) {
+                    Toast.makeText(getActivity(), "출발지와 도착지는 달라야합니다", Toast.LENGTH_SHORT).show();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
+                            .replace(R.id.frameContainer, new Taxi())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+        });
+        backtaxi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.left_in,R.anim.right_out)
+                        .replace(R.id.frameContainer, new Fragment3_main())
                         .addToBackStack(null)
                         .commit();
             }

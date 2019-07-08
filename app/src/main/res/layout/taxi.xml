@@ -8,6 +8,14 @@
     android:background="@color/white"
     android:layout_marginBottom="60dp">
 
+    <ImageView
+        android:id="@+id/backtaxi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_chevron_left_black_24dp"
+        android:gravity="left"
+        />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/swap"
         app:backgroundTint="#E66A00"
