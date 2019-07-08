@@ -52,6 +52,7 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                 System.out.println(Fragment3.endpoint);
             }
         }
+        mTaxitime= sortRecycle(mTaxitime);
     }
 
     @NonNull
@@ -153,6 +154,32 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
             return 0;
         }
         return mTaxitime.size();
+    }
+
+    private List<Taxitime> sortRecycle(List<Taxitime> taxitime){
+        if(taxitime==null){
+            return taxitime;
+        }
+        else{
+            for(int i=0; i<taxitime.size()-1;i++){
+                Taxitime taxiitem= taxitime.get(i);
+                Taxitime taxiitem2= taxitime.get(i+1);
+                String[] time1= taxiitem.stime.split(":");
+                String[] time2= taxiitem2.stime.split(":");
+                if(Integer.parseInt(time1[0])>Integer.parseInt(time2[0])){
+                    taxitime.set(i,taxiitem2);
+                    taxitime.set(i+1,taxiitem);
+
+                }
+                else if(Integer.parseInt(time1[0])==Integer.parseInt(time2[0])){
+                    if(Integer.parseInt(time1[1])>Integer.parseInt(time2[1])){
+                        taxitime.set(i,taxiitem2);
+                        taxitime.set(i+1,taxiitem);
+                    }
+                }
+            }
+        }
+        return taxitime;
     }
 
 }
