@@ -3,8 +3,10 @@ package com.example.newfinal;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -122,25 +124,29 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                 //인원수 추가
                 CharSequence currentholder= holder.ivpeople.getText();
                 CharSequence currentlimit = holder.ivlimit.getText();
-                int peoplenumber = Integer.parseInt(currentholder.toString());
+                final int peoplenumber = Integer.parseInt(currentholder.toString());
                 int limitnum = Integer.parseInt(currentlimit.toString());
-                if(peoplenumber>=limitnum){
-
-                    Taxi taxi= new Taxi();
-                    new CustomToast().Show_Toast(taxi.getActivity(), baseView,
-                            "All fields are required.");
+                if(holder.iventer.getText().equals("참여")) {
+                    if (peoplenumber >= limitnum) {
+                        Toast.makeText(mContext,"정원초과!",Toast.LENGTH_SHORT).show();
+                    } else {
+                        int innum = peoplenumber + 1;
+                        CharSequence added = (CharSequence) Integer.toString(innum);
+                        holder.ivpeople.setText(added);
+                        holder.iventer.setText("나가기");
+                        holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bgc));
+                    }
                 }
                 else {
-                    peoplenumber++;
-                    CharSequence added = (CharSequence) Integer.toString(peoplenumber);
-                    holder.ivpeople.setText(added);
+                            int denum = peoplenumber - 1;
+                            CharSequence added = (CharSequence) Integer.toString(denum);
+                            holder.ivpeople.setText(added);
+                            holder.iventer.setText("참여");
+                            holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bg));
                 }
-                //알림 보내기
-
             }
         });
     }
-
     @Override
     public int getItemCount() {
         if(mTaxitime==null){
