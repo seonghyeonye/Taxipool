@@ -28,7 +28,7 @@ public class taxi_register extends Fragment {
     EditText limitperson;
 
     private OnFragmentInteractionListener2 mListener;
-    PortToServer port = new PortToServer("http://143.248.36.38:3000");
+    PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
     QueryToServerMongoBuilder builderTaxi = new QueryToServerMongoBuilder("madcamp", "taxi");
 
     public taxi_register(){

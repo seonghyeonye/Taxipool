@@ -19,16 +19,13 @@ public class FullImageActivity extends AppCompatActivity {
 
         Intent i = getIntent();
 
-        int position = i.getExtras().getInt("id");
-        ImageAdapter adapter = new ImageAdapter(this);
-
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
         //imageView.setImageResource(adapter.images.get(position));
-         Uri dataValue=adapter.images.get(position);
-         imageView.setImageURI(dataValue);
-       // ImageAdapter adapter = new ImageAdapter(this);
+        Uri dataValue=(Uri)i.getExtras().get("uri");
+        imageView.setImageURI(dataValue);
+        // ImageAdapter adapter = new ImageAdapter(this);
 
-      //  ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        //  ImageView imageView = (ImageView) findViewById(R.id.imageView);
         //String dataValue=adapter.images.get(position);
         //byte[] bytes= Base64.decode(dataValue,Base64.DEFAULT);
         // byte[] bytes = dataValue.getBytes();

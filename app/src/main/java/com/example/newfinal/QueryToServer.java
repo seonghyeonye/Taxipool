@@ -16,6 +16,13 @@ public class QueryToServer {
         return target;
     }
 
+    public QueryToServer(String target) {
+        this.target = target;
+    }
+
+    public QueryToServer() {
+    }
+
     public String toString(){
         Gson gson = new Gson();
         return gson.toJson(this);

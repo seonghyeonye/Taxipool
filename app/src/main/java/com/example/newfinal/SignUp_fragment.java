@@ -1,5 +1,6 @@
 package com.example.newfinal;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -49,6 +50,8 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.mongodb.BasicDBObject;
+import com.mongodb.QueryBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,11 +73,12 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
     private LoginButton loginButton;
     private String usertoken =null;
     private String userId=null;
-
+    PortToServer port;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
         view = inflater.inflate(R.layout.signup_layout, container, false);
         printKeyHash();
         initViews();
@@ -85,37 +89,37 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
         circleImageView = view.findViewById(R.id.profile_email);
 
         //FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-         callbackManager = CallbackManager.Factory.create();
+        callbackManager = CallbackManager.Factory.create();
         //LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile","email"));
         loginButton.setReadPermissions("email");
         loginButton.setFragment(this);
         System.out.println("running");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-           @Override
-           public void onSuccess(LoginResult loginResult) {
-               //AccessToken accessToken = AccessToken.getCurrentAccessToken();
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                //AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-               usertoken= loginResult.getAccessToken().getToken();
-               userId = loginResult.getAccessToken().getUserId();
-               System.out.println(usertoken);
-               System.out.println("success");
-               System.out.println(userId);
+                usertoken= loginResult.getAccessToken().getToken();
+                userId = loginResult.getAccessToken().getUserId();
+                System.out.println(usertoken);
+                System.out.println("success");
+                System.out.println(userId);
 
-           }
+            }
 
-           @Override
-           public void onCancel() {
-               Log.d("TAG", "취소됨");
-               System.out.println("cancel");
-           }
+            @Override
+            public void onCancel() {
+                Log.d("TAG", "취소됨");
+                System.out.println("cancel");
+            }
 
-           @Override
-           public void onError(FacebookException error) {
-               error.printStackTrace();
-               System.out.println("error");
-           }
-       });
-       System.out.println("finish");
+            @Override
+            public void onError(FacebookException error) {
+                error.printStackTrace();
+                System.out.println("error");
+            }
+        });
+        System.out.println("finish");
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         System.out.println(isLoggedIn);
@@ -123,8 +127,8 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
         //System.out.println(accessToken);
 
         //Log.v("TAG", "Token::" + session.getAccessToken().getToken());
-    return view;
-}
+        return view;
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode,  Intent data) {
@@ -159,6 +163,7 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
 
                 // Call checkValidation method
                 checkValidation();
+
                 break;
 
             case R.id.already_user:
@@ -175,8 +180,7 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
     }
 
     // Check Validation Method
-    private void checkValidation() {
-
+    private  void checkValidation() {
         // Get all edittext texts
         String getFullName = fullName.getText().toString();
         String getEmailId = emailId.getText().toString();
@@ -196,12 +200,12 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
         else if(usertoken==null){
             new CustomToast().Show_Toast(getActivity(),view,"Please authenticate with Facebook");
         }
-            // Check if email id valid or not
+        // Check if email id valid or not
         /*(else if (!m.find())
             new CustomToast().Show_Toast(getActivity(), view,
                     "Your Email Id is Invalid.");
 */
-            // Check if both password should be equal
+        // Check if both password should be equal
         else if (!getConfirmPassword.equals(getPassword))
             new CustomToast().Show_Toast(getActivity(), view,
                     "Both password doesn't match.");
@@ -212,12 +216,37 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
                     "Please select Terms and Conditions.");
 
             // Else do signup or do your stuff
-        else
-            Toast.makeText(getActivity(), "Do SignUp.", Toast.LENGTH_SHORT)
-                    .show();
-            LoginManager.getInstance().logOut();
-
+        else {
+            try {
+                JSONObject obj = port.postToServerV2(new BasicQueryToServer("/register").setData(new BasicDBObject().append("id", getEmailId).append("password", getConfirmPassword).append("email", getEmailId).append("name", getFullName)));
+                if (obj!=null){
+                    if (obj.getString("result").equals("OK")) {
+                        new CustomToast().Show_Toast(getActivity(), view,
+                                "Sign Up Success");
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.down_enter, R.anim.up_out)
+                                .replace(R.id.frameContainer, ((MainActivity) getActivity()).loginFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                    else{
+                        new CustomToast().Show_Toast(getActivity(), view,
+                                obj.getString("data"));
+                    }
+                }
+                else{
+                    new CustomToast().Show_Toast(getActivity(), view,
+                            "Try Again");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        LoginManager.getInstance().logOut();
     }
+
     private void printKeyHash(){
         try{
             PackageInfo info= getActivity().getPackageManager().getPackageInfo("com.example.newfinal", PackageManager.GET_SIGNATURES);
@@ -230,8 +259,6 @@ public class SignUp_fragment extends Fragment implements OnClickListener {
                 catch(NoSuchAlgorithmException e){
                     e.printStackTrace();
                 }
-
-
             }
         }
         catch(PackageManager.NameNotFoundException e){

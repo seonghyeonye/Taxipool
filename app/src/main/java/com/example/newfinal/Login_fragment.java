@@ -1,5 +1,6 @@
 package com.example.newfinal;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +32,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.mongodb.BasicDBObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Login_fragment extends Fragment {
@@ -144,19 +150,39 @@ public class Login_fragment extends Fragment {
         }
         // Check if email id is valid or not
         //else if (!m.find())
-          //  new CustomToast().Show_Toast(getActivity(), view,
-          //          "Your Email Id is Invalid.");
-            // Else do login and do your stuff
-        else
-
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.down_enter,R.anim.up_out)
-                .replace(R.id.frameContainer, mainFragment)
-                .addToBackStack(null)
-                .commit();
+        //  new CustomToast().Show_Toast(getActivity(), view,
+        //          "Your Email Id is Invalid.");
+        // Else do login and do your stuff
+        else {
+            PortToServer port  = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
+            JSONObject obj = null;
+            try {
+                obj=port.postToServerV2(new BasicQueryToServer("/login").setData(new BasicDBObject().append("id", getEmailId).append("password", getPassword)));
+                if (obj!=null) {
+                    if (obj.getString("result").equals("OK")) {
+                        System.out.println("success");
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.down_enter, R.anim.up_out)
+                                .replace(R.id.frameContainer, mainFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        new CustomToast().Show_Toast(getActivity(), view,
+                                obj.getString("data"));
+                    }
+                }
+                else {
+                    new CustomToast().Show_Toast(getActivity(), view,
+                            "try again");
+                }
+            } catch(IOException e){
+                e.printStackTrace();
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
         System.out.println(loginid.getText().toString());
         System.out.println(loginpassword.getText().toString());
-
     }
 
 }

@@ -58,7 +58,7 @@ public class Taxi extends Fragment {
         recyclerView.setAdapter(adapter);
 
         try {
-            PortToServer port = new PortToServer("http://143.248.36.38:3000");
+            PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
             QueryToServer queryS;
             BasicDBObject query = new BasicDBObject().append("account._id", "myhwang99");
             JSONArray queries = new JSONArray().put(query);

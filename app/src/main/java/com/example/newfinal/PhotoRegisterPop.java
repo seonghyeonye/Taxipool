@@ -2,18 +2,22 @@ package com.example.newfinal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.mongodb.BasicDBObject;
@@ -22,6 +26,7 @@ import com.mongodb.util.JSON;
 
 import org.json.JSONArray;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 
@@ -33,22 +38,19 @@ import java.io.IOException;
  * Use the {@link PhoneBookRegisterFrag#} factory method to
  * create an instance of this fragment.
  */
-public class PhoneBookRegisterFrag extends Fragment {
+public class PhotoRegisterPop extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     EditText name;
-    EditText phoneNumber;
-    EditText email;
     EditText group;
 
     private OnFragmentInteractionListener mListener;
 
     PortToServer port;
-    QueryToServerMongoBuilder builderContacts = new QueryToServerMongoBuilder("madcamp", "contacts");
+    QueryToServerMongoBuilder builderGallery = new QueryToServerMongoBuilder("madcamp", "gallery");
 
-    public PhoneBookRegisterFrag() {
-        // Required empty public constructor
+    public PhotoRegisterPop() {
     }
 
     @Override
@@ -58,17 +60,27 @@ public class PhoneBookRegisterFrag extends Fragment {
 
 
     public void mOnCancle(View v){
-        close();
+        finish();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        String uriString = getArguments().getString("uri");
+        Uri uri = Uri.parse(uriString);
         port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
-        final View view = inflater.inflate(R.layout.fragment_phone_book_register, container, false);
+        final View view = inflater.inflate(R.layout.fragment_photo_register_pop, container, false);
         LinearLayout layout = view.findViewById(R.id.registerLayout);
-        layout =view.findViewById(R.id.registerTop);
+        Bitmap imageBitmap = null;
+        try {
+            imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        final ImageView image = view.findViewById(R.id.newImage);
+        final Bitmap image_bitmap = imageBitmap;
+        image.setImageBitmap(image_bitmap);
         Button buttonInsert = (Button)view.findViewById(R.id.registerButton);
         buttonInsert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,33 +88,26 @@ public class PhoneBookRegisterFrag extends Fragment {
                 //데이터 읽기
                 System.out.println("inserted");
                 name = getActivity().findViewById (R.id.newName);
-                phoneNumber = view.findViewById(R.id.newPhoneNumber);
-                email = view.findViewById(R.id.newEmail);
-                group = view.findViewById(R.id.group);
+                group = view.findViewById(R.id.newGroup);
                 String _name = name.getText().toString();
+                String _group = group.getText().toString();
                 if (_name.isEmpty()){
                     System.out.println("empty");
-                    close();
+                    finish();
                 }
-                String _phoneNumber = phoneNumber.getText().toString();
-                String _email = email.getText().toString();
-                String[] data = {_name, _phoneNumber, _email};
-                System.out.println("data built");
-                //데이터 전달하기
-                Contact contact = new Contact(data[0], data[1], data[2]);
                 try {
-                    port.postToServerV2(builderContacts.getQueryC(new JSONArray().put(QueryBuilder.start("contact").is((BasicDBObject) JSON.parse(contact.toString())).get())));
+                    port.postToServerV2(builderGallery.getQueryC(new JSONArray().put(new BasicDBObject().append("gallery", new BasicDBObject().append("photo", bitmapToByteArray(image_bitmap)).append("name", _name).append("group", _group)))));
                 } catch (IOException e){
                     e.printStackTrace();
                 }
-                close();
+                finish();
             }
         });
         Button buttonCancel = (Button)view.findViewById(R.id.cancel_button);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                close();
+                finish();
             }
         });
         return view;
@@ -129,8 +134,20 @@ public class PhoneBookRegisterFrag extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void close(){
-        System.out.println("??????????????");
+    public void finish(){
+        System.out.println("on finish: " + ((MainActivity)getActivity()).currentTab);
         ((MainActivity)getActivity()).showProperFragment();
+    }
+
+    public byte[] bitmapToByteArray( Bitmap bitmap ) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+        bitmap.compress( Bitmap.CompressFormat.JPEG, 100, stream) ;
+        byte[] byteArray = stream.toByteArray() ;
+        return byteArray ;
+    }
+
+    public Bitmap byteArrayToBitmap( byte[] byteArray ) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray( byteArray, 0, byteArray.length ) ;
+        return bitmap ;
     }
 }

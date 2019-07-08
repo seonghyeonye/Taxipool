@@ -64,6 +64,10 @@ public class Fragment1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        System.out.println("frag1 on create view");
+        if (((MainActivity)getActivity()).currentTab != 0){
+
+        }
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment1, container, false);
         initUI(rootView);
         buttonAdd = rootView.findViewById(R.id.plus2);
@@ -84,23 +88,26 @@ public class Fragment1 extends Fragment {
         recyclerView = rootView.findViewById(R.id.plant_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         final PostAdapter adapter = new PostAdapter(context, contacts);
+        contacts.clear();
         recyclerView.setAdapter(adapter);
         try {
-            PortToServer port = new PortToServer("http://143.248.36.38:3000");
+            PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
             QueryToServer queryS;
+            /*
             BasicDBObject query = new BasicDBObject().append("account._id", "myhwang99");
-            JSONArray queries = new JSONArray().put(query);
-            queryS = new QueryToServerMongo("madcamp", "contacts", "/crud/research", new JSONArray().put(query));
+            JSONArray queries = new JSONArray().put(query);*/
+            queryS = new QueryToServerMongo("madcamp", "contacts", "/crud/research", new JSONArray().put(new BasicDBObject()));
             JSONObject respond = port.postToServerV2(queryS);
             if (respond!=null) {
                 if (respond.getString("result").equals("OK")) {
                     if (respond.getJSONArray("data").length() > 0) {
                         Gson gson = new Gson();
-                        JSONObject found = (JSONObject) respond.getJSONArray("data").get(0);
-                        List<Contact> contactList = (List<Contact>) gson.fromJson(found.getString("contacts"), new TypeToken<List<Contact>>() {
-                        }.getType());
+                        JSONArray found = respond.getJSONArray("data");
+                        List<Contact> contactList = new ArrayList<>();
+                        for (int i=0; i<found.length(); i++){
+                            contactList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Contact.class));
+                        }
                         System.out.println("ok");
-                        contacts.clear();
                         contacts.addAll(contactList);
                     }
                 }

@@ -23,18 +23,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private Context mContext;
     private List<Contact> contacts;
-    PortToServer port = new PortToServer("http://143.248.36.38:3000");
+    PortToServer port;
     Gson gson = new Gson();
 
     public PostAdapter(Context mContext, List<Contact> contacts) {
         this.mContext = mContext;
         this.contacts = contacts;
+        port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)mContext).cookies);
     }
 
     @NonNull
@@ -60,13 +62,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                         .setIcon(android.R.drawable.ic_menu_save)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                contacts.remove(position);
+                                Contact removed = contacts.remove(position);
                                 Toast.makeText(mContext.getApplicationContext(), "연락처가 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                                DBObject query = QueryBuilder.start("account._id").is("myhwang99").get();
-                                System.out.println("123456");
-                                System.out.println(query);
                                 QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "contacts");
-                                QueryToServerMongo queryS = builder.getQueryU(new JSONArray().put(query).put(QueryBuilder.start("$set").is(QueryBuilder.start("contacts").is(contacts.toArray()).get()).get()));
+                                QueryToServerMongo queryS = builder.getQueryD(new JSONArray().put(new BasicDBObject().append("contact.name", removed.getName())));
                                 try {
                                     JSONObject obj = port.postToServerV2(queryS);
                                     if (obj.getString("result").equals("OK")){
@@ -74,8 +73,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                                         obj = port.postToServerV2(builder.getQueryR(new JSONArray().put(new BasicDBObject())));
                                         if (obj.getString("result").equals("OK")) {
                                             if (obj.getJSONArray("data").length()>0){
-                                                JSONObject found = (JSONObject)obj.getJSONArray("data").get(0);
-                                                List<Contact> contactList = (List<Contact>) gson.fromJson(found.getString("contacts"), new TypeToken<List<Contact>>(){}.getType());
+                                                JSONArray found = obj.getJSONArray("data");
+                                                List<Contact> contactList = new ArrayList<>();
+                                                for (int i=0; i<found.length(); i++){
+                                                    contactList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Contact.class));
+                                                }
                                                 System.out.println("ok");
                                                 contacts.addAll(contactList);
                                             }

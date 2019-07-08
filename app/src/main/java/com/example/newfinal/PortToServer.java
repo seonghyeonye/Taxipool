@@ -26,6 +26,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import java.io.ByteArrayOutputStream;
@@ -35,9 +36,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Map;
 
 public class PortToServer {
     String url;
+    Map<String, String> cookies;
     String TAG = "PortToServer";
     public String getUrl() {
         return url;
@@ -47,8 +50,9 @@ public class PortToServer {
         this.url = url;
     }
 
-    public PortToServer(String url) {
+    public PortToServer(String url, Map<String, String> cookies) {
         this.url = url;
+        this.cookies = cookies;
     }
     /*
         public JSONObject postToServer(String query){
@@ -128,7 +132,7 @@ public class PortToServer {
     public JSONObject postToServerV2(final QueryToServer query) throws IOException {
         final URL url = new URL(getUrl() + query.getTarget());
         //URL url = new URL("http://143.248.36.38:3000");
-        final int TIMEOUT_VALUE = 4000;
+        final int TIMEOUT_VALUE = 100000;
         // HTTP 접속 구하기
         final List<JSONObject> result = new ArrayList<>();
         Thread thread = new Thread() {
@@ -138,7 +142,18 @@ public class PortToServer {
                 synchronized (this) {
                     try {
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
+                        String prevCookie = cookies.getOrDefault(getUrl(), "");
+                        //System.out.println(conn.getHeaderFields());
+/*
+                        if (conn.getHeaderField("Set-Cookie")!=null){
+                            System.out.println("cookie was provided");
+                            prevCookie = prevCookie+conn.getHeaderField("Set-Cookie");
+                            cookies.put(getUrl(), prevCookie);
+                        }
+*/
+                        if (!prevCookie.equals("")){
+                            conn.setRequestProperty("Cookie", prevCookie);
+                        }
                         conn.setRequestProperty("Content-Type", "application/json");
 
                         conn.setConnectTimeout(TIMEOUT_VALUE);
@@ -169,6 +184,10 @@ public class PortToServer {
                         res = new String(byteout.toByteArray(), "UTF-8");
                         System.out.println(res);
                         // 접속 해제
+                        if (conn.getHeaderField("Set-Cookie")!=null){
+                            System.out.println("cookie was provided");
+                            cookies.put(getUrl(), prevCookie+conn.getHeaderField("Set-Cookie"));
+                        }
                         conn.disconnect();
                         JSONObject obj = null;
                         obj = new JSONObject(res);

@@ -26,12 +26,13 @@ import java.util.List;
 public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
     private Context mContext;
     private List<Taxitime> mTaxitime;
-    PortToServer port = new PortToServer("http://143.248.36.38:3000");
+    PortToServer port;
     Gson gson = new Gson();
 
     public PtaxiAdapter(Context mContext, List<Taxitime> time) {
         this.mContext = mContext;
         this.mTaxitime = time;
+        this.port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)mContext).cookies);
     }
 
     @NonNull
