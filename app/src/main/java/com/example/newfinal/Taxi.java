@@ -37,6 +37,7 @@ public class Taxi extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        context = ((MainActivity)getActivity());
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.show_taxi, container, false);
         initUI(rootView);
         return rootView;
@@ -60,17 +61,18 @@ public class Taxi extends Fragment {
         try {
             PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
             QueryToServer queryS;
-            BasicDBObject query = new BasicDBObject().append("account._id", "myhwang99");
-            JSONArray queries = new JSONArray().put(query);
+            BasicDBObject query = new BasicDBObject();
             queryS = new QueryToServerMongo("madcamp", "taxi", "/crud/research", new JSONArray().put(query));
             JSONObject respond = port.postToServerV2(queryS);
             if (respond!=null) {
                 if (respond.getString("result").equals("OK")) {
                     if (respond.getJSONArray("data").length() > 0) {
                         Gson gson = new Gson();
-                        JSONObject found = (JSONObject) respond.getJSONArray("data").get(0);
-                        List<Taxitime> newTaxi = (List<Taxitime>) gson.fromJson(found.getString("taxi"), new TypeToken<List<Taxitime>>() {
-                        }.getType());
+                        JSONArray found = respond.getJSONArray("data");
+                        List <Taxitime> newTaxi = new ArrayList<>();
+                        for (int i = 0; i < found.length(); i++){
+                            newTaxi.add(gson.fromJson(found.getJSONObject(i).getString("taxi"), Taxitime.class));
+                        }
                         System.out.println("ok");
                         taxitime.clear();
                         taxitime.addAll(newTaxi);

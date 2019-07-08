@@ -32,11 +32,17 @@ public class taxi_register extends Fragment {
     private String getTime;
 
     private OnFragmentInteractionListener2 mListener;
-    PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
+    PortToServer port;
     QueryToServerMongoBuilder builderTaxi = new QueryToServerMongoBuilder("madcamp", "taxi");
 
     public taxi_register(){
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
     }
 
     @Override
@@ -96,7 +102,7 @@ public class taxi_register extends Fragment {
                     //make taxitime
                     Taxitime taxitime = new Taxitime(data[0], data[1], data[2],data[3],getTime,(String) Fragment3.startpoint, (String) Fragment3.endpoint);
                     try {
-                        port.postToServerV2(builderTaxi.getQueryU(new JSONArray().put(QueryBuilder.start("account._id").is("myhwang99").get()).put(QueryBuilder.start("$push").is(QueryBuilder.start("taxi").is((BasicDBObject) JSON.parse(taxitime.toString())).get()).get())));
+                        port.postToServerV2(builderTaxi.getQueryC(new JSONArray().put(QueryBuilder.start("taxi").is((BasicDBObject) JSON.parse(taxitime.toString())).get())));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
