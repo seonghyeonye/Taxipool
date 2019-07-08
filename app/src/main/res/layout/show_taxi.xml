@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="60dp"
+    android:padding="8dp"
     android:orientation="vertical">
 
 
@@ -65,25 +66,25 @@
         android:background="@color/white_greyish">
         <TableRow>
             <TextView
-                android:layout_width="25dp"
+                android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:text="등록"
+                android:text="TO"
                 android:textSize="17dp"
                 android:gravity="center"/>
 
             <TextView
-                android:text="Time"
+                android:text="FROM"
                 android:textSize="17dp"
                 android:layout_height="30dp"
                 android:gravity="center"
-                android:layout_width="wrap_content"
+                android:layout_width="35dp"
                 android:fontFamily="@font/glass"
                 />
             <TextView
                 android:textSize="17dp"
                 android:text="인원"
                 android:gravity="center"
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="30dp"
                 android:fontFamily="@font/glass"
                 />
@@ -91,7 +92,7 @@
                 android:textSize="17dp"
                 android:text="정원"
                 android:gravity="center"
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="30dp"
                 android:fontFamily="@font/glass"
                 />
@@ -99,7 +100,7 @@
                 android:textSize="17dp"
                 android:text="참여"
                 android:gravity="center"
-                android:layout_width="50dp"
+                android:layout_width="40dp"
                 android:layout_height="30dp"/>
         </TableRow>
     </TableLayout>

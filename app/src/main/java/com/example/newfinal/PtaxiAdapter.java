@@ -33,10 +33,19 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
     public PtaxiAdapter(Context mContext, List<Taxitime> time) {
         this.mContext = mContext;
         this.port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)mContext).cookies);
-        for(int i=0;i<mTaxitime.size();i++){
-            Taxitime taxiitem= mTaxitime.get(i);
+        for(int i=0;i<time.size();i++){
+            Taxitime taxiitem= time.get(i);
             if(taxiitem.startplace==Fragment3.startpoint&&taxiitem.endplace==Fragment3.endpoint&&Taxi.getTime==taxiitem.date){
                 this.mTaxitime.add(taxiitem);
+                System.out.println("condition matched");
+            }
+            else{
+                System.out.println(taxiitem.date);
+                System.out.println(Taxi.getTime);
+                System.out.println(taxiitem.startplace);
+                System.out.println(Fragment3.startpoint);
+                System.out.println(taxiitem.endplace);
+                System.out.println(Fragment3.endpoint);
             }
         }
     }
@@ -56,7 +65,8 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
         holder.ivEtime.setText(taxitime.etime);
         holder.ivlimit.setText(taxitime.limit);
         if(holder.ivpeople.getText()==null){
-            holder.ivpeople.setText(0);
+            System.out.println("this is now be filled");
+            holder.ivpeople.setText('0');
         }
         holder.ivtaxirow.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -109,11 +119,18 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
             public void onClick(View view) {
                 //인원수 추가
                 CharSequence currentholder= holder.ivpeople.getText();
+                CharSequence currentlimit = holder.ivlimit.getText();
                 int peoplenumber = Integer.parseInt(currentholder.toString());
-                peoplenumber++;
-                CharSequence added= (CharSequence)Integer.toString(peoplenumber);
-                holder.ivpeople.setText(added);
-
+                int limitnum = Integer.parseInt(currentlimit.toString());
+                if(peoplenumber<=limitnum){
+                    Taxi taxi= new Taxi();
+                    taxi.alert();
+                }
+                else {
+                    peoplenumber++;
+                    CharSequence added = (CharSequence) Integer.toString(peoplenumber);
+                    holder.ivpeople.setText(added);
+                }
                 //알림 보내기
 
             }
@@ -122,9 +139,10 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
 
     @Override
     public int getItemCount() {
+        if(mTaxitime==null){
+            return 0;
+        }
         return mTaxitime.size();
     }
-
-
 
 }

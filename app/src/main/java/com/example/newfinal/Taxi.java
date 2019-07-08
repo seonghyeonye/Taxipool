@@ -35,11 +35,12 @@ public class Taxi extends Fragment {
     RecyclerView recyclerView;
     List<Taxitime> taxitime = new ArrayList<>();
     public static String getTime;
+    ViewGroup rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = ((MainActivity)getActivity());
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.show_taxi, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.show_taxi, container, false);
         initUI(rootView);
         return rootView;
     }
@@ -54,10 +55,10 @@ public class Taxi extends Fragment {
 
        // }
 
-        recyclerView = rootView.findViewById(R.id.show_time);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        final PtaxiAdapter adapter = new PtaxiAdapter(context, taxitime);
-        recyclerView.setAdapter(adapter);
+//        recyclerView = rootView.findViewById(R.id.show_time);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        final PtaxiAdapter adapter = new PtaxiAdapter(context, taxitime);
+//        recyclerView.setAdapter(adapter);
 
         try {
             PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
@@ -85,7 +86,11 @@ public class Taxi extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
+        recyclerView = rootView.findViewById(R.id.show_time);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        final PtaxiAdapter adapter = new PtaxiAdapter(context, taxitime);
+        recyclerView.setAdapter(adapter);
 
         //System.out.println(startpoint2.getText());
         startpoint2.setText(Fragment3.startpoint);
@@ -116,5 +121,10 @@ public class Taxi extends Fragment {
         });
 
 
+    }
+
+    public void alert(){
+        new CustomToast().Show_Toast(getActivity(), rootView,
+                "All fields are required.");
     }
 }
