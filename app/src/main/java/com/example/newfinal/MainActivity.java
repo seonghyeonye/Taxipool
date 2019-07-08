@@ -30,9 +30,12 @@ public class MainActivity extends AppCompatActivity  {
     PortToServer port = new PortToServer("http://143.248.36.38:3000");
     QueryToServerMongoBuilder builderContacts = new QueryToServerMongoBuilder("madcamp", "contacts");
     QueryToServerMongoBuilder builderGalleries = new QueryToServerMongoBuilder("madcamp", "galleries");
+    QueryToServerMongoBuilder builderTaxi= new QueryToServerMongoBuilder("madcamp","taxi");
     Fragment1 fragment1 = new Fragment1();
     Fragment2 fragment2 = new Fragment2();
     Fragment3_main fragment3 = new Fragment3_main();
+    Fragment3 fragment31= new Fragment3();
+    Taxi taxi= new Taxi();
     Login_fragment loginFragment = new Login_fragment();
     MainFragment mainFragment = new MainFragment();
     
@@ -44,6 +47,22 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, loginFragment).commit();
     }
+
+    /*@Override
+    public void onBackPressed() {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        System.out.println(count);
+        if (count == 2) {
+            super.onBackPressed();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commit();
+
+            //additional code
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

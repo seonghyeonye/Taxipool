@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class Fragment3_main extends Fragment {
     Context context;
-
 
 
     @Override
@@ -38,6 +38,10 @@ public class Fragment3_main extends Fragment {
         mytaxi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+//                String fragmentTag = ((MainActivity) getActivity()).fragment3.getClass().getSimpleName();
+////
+//                getActivity().getSupportFragmentManager().popBackStack(fragmentTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
                         .replace(R.id.frameContainer,new chat_list())
