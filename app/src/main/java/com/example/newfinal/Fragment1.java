@@ -105,7 +105,11 @@ public class Fragment1 extends Fragment {
                         JSONArray found = respond.getJSONArray("data");
                         List<Contact> contactList = new ArrayList<>();
                         for (int i=0; i<found.length(); i++){
-                            contactList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Contact.class));
+                            try {
+                                contactList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Contact.class));
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                         System.out.println("ok");
                         contacts.addAll(contactList);

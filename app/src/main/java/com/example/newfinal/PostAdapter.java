@@ -76,7 +76,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                                                 JSONArray found = obj.getJSONArray("data");
                                                 List<Contact> contactList = new ArrayList<>();
                                                 for (int i=0; i<found.length(); i++){
-                                                    contactList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Contact.class));
+                                                    try {
+                                                        contactList.add(gson.fromJson(found.getJSONObject(i).getString("contact"), Contact.class));
+                                                    } catch (Exception e){
+                                                        e.printStackTrace();
+                                                    }
                                                 }
                                                 System.out.println("ok");
                                                 contacts.addAll(contactList);
