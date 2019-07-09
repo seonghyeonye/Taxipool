@@ -35,9 +35,28 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
     PortToServer port;
     Gson gson = new Gson();
     View baseView;
+
+    public Context getmContext() {
+        return mContext;
+    }
+
+    public void setmContext(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public List<Taxitime> getmTaxitime() {
+        return mTaxitime;
+    }
+
+    public void setmTaxitime(List<Taxitime> mTaxitime) {
+        this.mTaxitime = mTaxitime;
+    }
+
     public PtaxiAdapter(Context mContext, List<Taxitime> time) {
         this.mContext = mContext;
+        mTaxitime = time;
         this.port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)mContext).cookies);
+        /*
         for(int i=0;i<time.size();i++){
             Taxitime taxiitem= time.get(i);
             if(taxiitem.startplace.equals(Fragment3.startpoint)&&taxiitem.endplace.equals(Fragment3.endpoint)&&Taxi.getTime.equals(taxiitem.date)){
@@ -53,6 +72,7 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                 System.out.println(Fragment3.endpoint);
             }
         }
+        */
         mTaxitime= sortRecycle(mTaxitime);
     }
 
@@ -79,6 +99,10 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
             System.out.println("this is now be filled");
             holder.ivpeople.setText('0');
         }
+        else{
+            holder.ivpeople.setText(String.valueOf(mTaxitime.get(position).participators.length+1));
+        }
+
         holder.ivtaxirow.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -90,7 +114,7 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Taxitime removed = mTaxitime.remove(position);
                                 Toast.makeText(mContext.getApplicationContext(), "일정이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                                QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "taxi");
+                                QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "taxi_public");
                                 QueryToServerMongo queryS = builder.getQueryD(new JSONArray().put(new BasicDBObject().append("taxi.user", removed.user)));
                                 try {
                                     JSONObject obj = port.postToServerV2(queryS);
@@ -127,6 +151,7 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                 return true;
             }
         });
+
         holder.iventer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,21 +164,38 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                     if (peoplenumber >= limitnum) {
                         Toast.makeText(mContext,"정원초과!",Toast.LENGTH_SHORT).show();
                     } else {
-                        int innum = peoplenumber + 1;
-                        CharSequence added = (CharSequence) Integer.toString(innum);
-                        holder.ivpeople.setText(added);
-                        holder.iventer.setText("나가기");
-                        holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bgc));
-
-
+                        try {
+                            Taxitime time = mTaxitime.get(position);
+                            int innum = peoplenumber + 1;
+                            CharSequence added = (CharSequence) Integer.toString(innum);
+                            QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "taxi_public");
+                            QueryToServerMongo queryS = builder.getQueryU(new JSONArray().put(new BasicDBObject().append("taxi.user", time.user)).put(new BasicDBObject().append("$push", new BasicDBObject().append("taxi.participators", ((MainActivity) mContext).account.getString("name")))));
+                            port.postToServerV2(queryS);
+                            holder.ivpeople.setText(added);
+                            holder.iventer.setText("나가기");
+                            holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bgc));
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+//lklkm
+//lklkm
                     }
                 }
                 else {
-                            int denum = peoplenumber - 1;
-                            CharSequence added = (CharSequence) Integer.toString(denum);
-                            holder.ivpeople.setText(added);
-                            holder.iventer.setText("참여");
-                            holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bg));
+                    try {
+                        Taxitime time = mTaxitime.get(position);
+                        int denum = peoplenumber - 1;
+                        CharSequence added = (CharSequence) Integer.toString(denum);
+                        holder.ivpeople.setText(added);
+                        holder.iventer.setText("참여");
+                        holder.iventer.setBackground(mContext.getDrawable(R.drawable.layout_bg));
+                        QueryToServerMongoBuilder builder = new QueryToServerMongoBuilder("madcamp", "taxi_public");
+                        String[] temp = {((MainActivity) mContext).account.getString("name")};
+                        QueryToServerMongo queryS = builder.getQueryU(new JSONArray().put(new BasicDBObject().append("taxi.user", time.user)).put(new BasicDBObject().append("$pullAll", new BasicDBObject().append("taxi.participators", temp))));
+                        port.postToServerV2(queryS);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         });

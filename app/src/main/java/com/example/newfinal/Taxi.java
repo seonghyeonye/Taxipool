@@ -25,8 +25,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -86,7 +88,7 @@ public class Taxi extends Fragment {
             PortToServer port = new PortToServer("http://143.248.36.38:3000", ((MainActivity)getActivity()).cookies);
             QueryToServer queryS;
             BasicDBObject query = new BasicDBObject();
-            queryS = new QueryToServerMongo("madcamp", "taxi", "/crud/research", new JSONArray().put(query));
+            queryS = new QueryToServerMongo("madcamp", "taxi_public", "/crud/research", new JSONArray().put(query));
             JSONObject respond = port.postToServerV2(queryS);
             if (respond!=null) {
                 if (respond.getString("result").equals("OK")) {
@@ -95,7 +97,18 @@ public class Taxi extends Fragment {
                         JSONArray found = respond.getJSONArray("data");
                         List <Taxitime> newTaxi = new ArrayList<>();
                         for (int i = 0; i < found.length(); i++){
-                            newTaxi.add(gson.fromJson(found.getJSONObject(i).getString("taxi"), Taxitime.class));
+                            System.out.println("ASDFASDFASDFASDF");
+                            try {
+                                Taxitime time = gson.fromJson(found.getJSONObject(i).getString("taxi"), Taxitime.class);
+                                if(Arrays.asList(time.participators).contains(((MainActivity)context).account.getString("name"))){
+                                    time.enter = "yes";
+                                } else {
+                                    time.enter = "NO";
+                                }
+                                newTaxi.add(time);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                         System.out.println("ok");
                         taxitime.clear();
@@ -108,17 +121,20 @@ public class Taxi extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        System.out.println("asd");
 //        adapter.notifyDataSetChanged();
         recyclerView = rootView.findViewById(R.id.show_time);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        System.out.println("asd2");
         final PtaxiAdapter adapter = new PtaxiAdapter(context, taxitime);
-        recyclerView.setAdapter(adapter);
 
+        recyclerView.setAdapter(adapter);
+        System.out.println("asd2");
         //System.out.println(startpoint2.getText());
         startpoint2.setText(Fragment3.startpoint);
         endpoint2.setText(Fragment3.endpoint);
 
-
+        System.out.println("asd3");
 
         plus3.setOnClickListener(new View.OnClickListener() {
             @Override

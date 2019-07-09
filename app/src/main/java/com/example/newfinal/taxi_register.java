@@ -32,7 +32,7 @@ public class taxi_register extends Fragment {
 
     private OnFragmentInteractionListener2 mListener;
     PortToServer port;
-    QueryToServerMongoBuilder builderTaxi = new QueryToServerMongoBuilder("madcamp", "taxi");
+    QueryToServerMongoBuilder builderTaxi = new QueryToServerMongoBuilder("madcamp", "taxi_public");
 
     public taxi_register(){
 

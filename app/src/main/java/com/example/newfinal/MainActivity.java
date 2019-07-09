@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity  {
     MainFragment mainFragment = new MainFragment();
     PortToServer port = new PortToServer("http://143.248.36.38:3000", cookies);
     int currentTab;
+    JSONObject account;
     
 
     @Override

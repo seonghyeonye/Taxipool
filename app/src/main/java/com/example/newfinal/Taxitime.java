@@ -2,6 +2,8 @@ package com.example.newfinal;
 
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
 public class Taxitime {
 
     String user;
@@ -12,6 +14,8 @@ public class Taxitime {
     String startplace;
     String endplace;
     String enter;
+    String[] participators;
+    JSONObject[] messages;
 
     public String get_user() {
         return user;
@@ -40,6 +44,8 @@ public class Taxitime {
         this.startplace= startplace;
         this.endplace=endplace;
         this.enter=enter;
+        this.participators = new String[0];
+        this.messages = new JSONObject[0];
     }
 
     public String toString (){

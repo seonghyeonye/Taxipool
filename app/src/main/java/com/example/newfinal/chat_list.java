@@ -34,6 +34,8 @@ public class chat_list extends Fragment {
                         .commit();
             }
         });
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.chatContainer, new myregister()).commit();
         tablist.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -42,10 +44,12 @@ public class chat_list extends Fragment {
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.chatContainer, new myregister()).commit();
                         System.out.println("enter one");
+                        break;
                     case 1:
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.chatContainer, new myjoin()).commit();
                         System.out.println("enter two");
+                        break;
                 }
             }
 

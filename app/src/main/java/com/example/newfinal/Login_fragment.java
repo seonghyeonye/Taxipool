@@ -160,6 +160,8 @@ public class Login_fragment extends Fragment {
                 obj=port.postToServerV2(new BasicQueryToServer("/login").setData(new BasicDBObject().append("id", getEmailId).append("password", getPassword)));
                 if (obj!=null) {
                     if (obj.getString("result").equals("OK")) {
+                        JSONObject data = obj.getJSONObject("data");
+                        ((MainActivity)getActivity()).account = data;
                         System.out.println("success");
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.down_enter, R.anim.up_out)
