@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -194,6 +195,27 @@ public class PtaxiAdapter  extends RecyclerView.Adapter<PtaxiViewHolder> {
                         QueryToServerMongo queryS = builder.getQueryU(new JSONArray().put(new BasicDBObject().append("taxi.user", time.user)).put(new BasicDBObject().append("$pullAll", new BasicDBObject().append("taxi.participators", temp))));
                         port.postToServerV2(queryS);
                     } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        holder.ivtaxirow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.iventer.getText().equals("나가기")) {
+                    try {
+                        System.out.println("clicked");
+                        Chat chat = new Chat();
+                        Bundle bundle = new Bundle(2);
+                        bundle.putString("name", ((MainActivity) mContext).account.getString("name"));
+                        Taxitime chatroom = getmTaxitime().get(position);
+                        bundle.putString("room", chatroom.user);
+                        chat.setArguments(bundle);
+                        ((MainActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, chat).commit();
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
