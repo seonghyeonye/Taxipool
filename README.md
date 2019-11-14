@@ -1,1 +1,1 @@
-# madcamp_2
+# madcamp week2 project
